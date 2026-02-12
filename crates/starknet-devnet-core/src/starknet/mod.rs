@@ -323,6 +323,31 @@ impl Starknet {
     pub(crate) fn generate_pre_confirmed_block(&mut self) {
         Self::advance_block_context_block_number(&mut self.block_context);
 
+        // Write old block hash to the block hash contract in state so that
+        // the blockifier can look it up during proof_facts validation and
+        // get_block_hash syscall.
+        let next_block_number = self.block_context.block_info().block_number;
+        let old_block_number_and_hash = next_block_number
+            .0
+            .checked_sub(blockifier::abi::constants::STORED_BLOCK_HASH_BUFFER)
+            .and_then(|old_num| {
+                let old_block_number = BlockNumber(old_num);
+                let old_block_hash = self.blocks.num_to_hash.get(&old_block_number)?;
+                Some(starknet_api::block::BlockHashAndNumber {
+                    number: old_block_number,
+                    hash: starknet_api::block::BlockHash(*old_block_hash),
+                })
+            });
+
+        if let Err(e) = blockifier::blockifier::block::pre_process_block(
+            &mut self.pre_confirmed_state.state,
+            old_block_number_and_hash,
+            next_block_number,
+            &get_versioned_constants().os_constants,
+        ) {
+            tracing::error!("Failed to pre-process block: {e}");
+        }
+
         Self::set_block_context_gas(&mut self.block_context, &self.next_block_gas);
 
         // Pre_confirmed block header gas data needs to be set
@@ -2127,6 +2152,68 @@ mod tests {
 
         assert_eq!(latest_block.unwrap().block_number(), BlockNumber(3));
     }
+    #[tokio::test(flavor = "multi_thread")]
+    async fn block_hashes_written_to_block_hash_contract() {
+        use blockifier::abi::constants::STORED_BLOCK_HASH_BUFFER;
+        use starknet_api::state::StorageKey;
+
+        let config = StarknetConfig::default();
+        let mut starknet = Starknet::new(&config).await.unwrap();
+
+        let versioned_constants = crate::utils::get_versioned_constants();
+        let block_hash_contract_address =
+            versioned_constants.os_constants.os_contract_addresses.block_hash_contract_address();
+
+        // Generate enough blocks to exceed STORED_BLOCK_HASH_BUFFER (10).
+        // Genesis block is 0, so we need to create blocks up to at least 10+1.
+        let total_blocks = STORED_BLOCK_HASH_BUFFER + 3;
+        for _ in 0..total_blocks {
+            starknet.generate_new_block_and_state().await;
+        }
+
+        // Block 0 (genesis) should now have its hash stored in the block hash contract,
+        // because the current block number is >= STORED_BLOCK_HASH_BUFFER.
+        let genesis_hash = *starknet.blocks.num_to_hash.get(&BlockNumber(0)).unwrap();
+        assert_ne!(genesis_hash, Felt::ZERO, "Genesis block hash should be non-zero");
+
+        let stored_hash = starknet
+            .pre_confirmed_state
+            .state
+            .get_storage_at(block_hash_contract_address, StorageKey::from(0u64))
+            .unwrap();
+        assert_eq!(
+            stored_hash, genesis_hash,
+            "Stored block hash for block 0 should match the actual block hash"
+        );
+
+        // Check a few more old blocks
+        for block_num in 1..=3u64 {
+            let expected_hash = *starknet.blocks.num_to_hash.get(&BlockNumber(block_num)).unwrap();
+            let stored = starknet
+                .pre_confirmed_state
+                .state
+                .get_storage_at(block_hash_contract_address, StorageKey::from(block_num))
+                .unwrap();
+            assert_eq!(
+                stored, expected_hash,
+                "Stored block hash for block {block_num} should match actual hash"
+            );
+        }
+
+        // A block within the buffer (too recent) should NOT have a stored hash yet.
+        let recent_block_num = total_blocks; // the latest confirmed block
+        let stored_recent = starknet
+            .pre_confirmed_state
+            .state
+            .get_storage_at(block_hash_contract_address, StorageKey::from(recent_block_num))
+            .unwrap();
+        assert_eq!(
+            stored_recent,
+            Felt::ZERO,
+            "Recent block within the buffer should not have a stored hash"
+        );
+    }
+
     #[tokio::test(flavor = "multi_thread")]
     async fn check_timestamp_of_newly_generated_block() {
         let config = StarknetConfig::default();
