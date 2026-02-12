@@ -155,7 +155,7 @@ impl Default for Starknet {
 }
 
 impl Starknet {
-    pub fn new(config: &StarknetConfig) -> DevnetResult<Self> {
+    pub async fn new(config: &StarknetConfig) -> DevnetResult<Self> {
         let defaulter = StarknetDefaulter::new(config.fork_config.clone());
         let rpc_contract_classes = Arc::new(RwLock::new(CommittedClassStorage::default()));
         let mut state = StarknetState::new(defaulter, rpc_contract_classes.clone());
@@ -294,7 +294,7 @@ impl Starknet {
         if let Some(start_time) = config.start_time {
             this.set_next_block_timestamp(start_time);
         };
-        this.create_block();
+        this.create_block().await;
 
         Ok(this)
     }
@@ -303,11 +303,11 @@ impl Starknet {
         &mut self.pre_confirmed_state
     }
 
-    pub fn restart(&mut self, restart_l1_to_l2_messaging: bool) -> DevnetResult<()> {
+    pub async fn restart(&mut self, restart_l1_to_l2_messaging: bool) -> DevnetResult<()> {
         let new_messaging_ethereum =
             if restart_l1_to_l2_messaging { None } else { self.messaging.ethereum.clone() };
 
-        *self = Starknet::new(&self.config)?;
+        *self = Starknet::new(&self.config).await?;
         self.messaging.ethereum = new_messaging_ethereum;
 
         info!("Starknet Devnet restarted");
@@ -364,7 +364,7 @@ impl Starknet {
 
     /// Transfer data from pre_confirmed block into new block and save it to blocks collection.
     /// Generates new pre_confirmed block. Same for pre_confirmed state. Returns the new block hash.
-    pub(crate) fn generate_new_block_and_state(&mut self) -> Felt {
+    pub(crate) async fn generate_new_block_and_state(&mut self) -> Felt {
         let timer = std::time::Instant::now();
 
         let mut new_block = self.pre_confirmed_block().clone();
@@ -436,14 +436,13 @@ impl Starknet {
             self.pre_confirmed_state_diff.clone().into();
 
         if !self.config.lite_mode {
-            let commitments = tokio::task::block_in_place(|| {
-                tokio::runtime::Handle::current().block_on(calculate_block_commitments(
-                    &transaction_data,
-                    thin_state_diff.clone(),
-                    l1_da_mode,
-                    &starknet_version,
-                ))
-            });
+            let commitments = calculate_block_commitments(
+                &transaction_data,
+                thin_state_diff.clone(),
+                l1_da_mode,
+                &starknet_version,
+            )
+            .await;
             new_block.set_commitments(commitments);
         }
 
@@ -489,7 +488,7 @@ impl Starknet {
 
     /// Handles succeeded and reverted transactions. The tx is stored and potentially dumped. A new
     /// block is generated in block-generation-on-transaction mode.
-    pub(crate) fn handle_accepted_transaction(
+    pub(crate) async fn handle_accepted_transaction(
         &mut self,
         transaction: TransactionWithHash,
         tx_info: TransactionExecutionInfo,
@@ -524,7 +523,7 @@ impl Starknet {
 
         // create new block from pre_confirmed one, only in block-generation-on-transaction mode
         if !self.config.uses_pre_confirmed_block() {
-            self.generate_new_block_and_state();
+            self.generate_new_block_and_state().await;
         }
 
         Ok(())
@@ -832,11 +831,11 @@ impl Starknet {
         estimations::estimate_message_fee(self, block_id, message)
     }
 
-    pub fn add_declare_transaction(
+    pub async fn add_declare_transaction(
         &mut self,
         declare_transaction: BroadcastedDeclareTransaction,
     ) -> DevnetResult<(TransactionHash, ClassHash)> {
-        add_declare_transaction::add_declare_transaction(self, declare_transaction)
+        add_declare_transaction::add_declare_transaction(self, declare_transaction).await
     }
 
     /// returning the chain id as object
@@ -844,7 +843,7 @@ impl Starknet {
         self.config.chain_id
     }
 
-    pub fn add_deploy_account_transaction(
+    pub async fn add_deploy_account_transaction(
         &mut self,
         deploy_account_transaction: BroadcastedDeployAccountTransaction,
     ) -> DevnetResult<(TransactionHash, ContractAddress)> {
@@ -852,20 +851,21 @@ impl Starknet {
             self,
             deploy_account_transaction,
         )
+        .await
     }
 
-    pub fn add_invoke_transaction(
+    pub async fn add_invoke_transaction(
         &mut self,
         invoke_transaction: BroadcastedInvokeTransaction,
     ) -> DevnetResult<TransactionHash> {
-        add_invoke_transaction::add_invoke_transaction(self, invoke_transaction)
+        add_invoke_transaction::add_invoke_transaction(self, invoke_transaction).await
     }
 
-    pub fn add_l1_handler_transaction(
+    pub async fn add_l1_handler_transaction(
         &mut self,
         l1_handler_transaction: L1HandlerTransaction,
     ) -> DevnetResult<TransactionHash> {
-        add_l1_handler_transaction::add_l1_handler_transaction(self, l1_handler_transaction)
+        add_l1_handler_transaction::add_l1_handler_transaction(self, l1_handler_transaction).await
     }
 
     fn minting_calldata(
@@ -945,6 +945,7 @@ impl Starknet {
             self,
             BroadcastedInvokeTransaction::V3(invoke_tx),
         )
+        .await
     }
 
     pub fn block_state_update(&self, block_id: &CustomBlockId) -> DevnetResult<StateUpdateResult> {
@@ -966,7 +967,7 @@ impl Starknet {
         }
     }
 
-    pub fn set_next_block_gas(
+    pub async fn set_next_block_gas(
         &mut self,
         gas_prices: GasModificationRequest,
     ) -> DevnetResult<GasModification> {
@@ -975,13 +976,13 @@ impl Starknet {
         // If generate_block is true, generate new block, for now custom dump_event is None but in
         // future it will change to GasSetEvent with self.next_block_gas data
         if let Some(true) = gas_prices.generate_block {
-            self.create_block()
+            self.create_block().await
         }
 
         Ok(self.next_block_gas.clone())
     }
 
-    pub fn abort_blocks(
+    pub async fn abort_blocks(
         &mut self,
         mut starting_block_id: CustomBlockId,
     ) -> DevnetResult<Vec<TransactionHash>> {
@@ -991,7 +992,7 @@ impl Starknet {
         }
 
         if let CustomBlockId::Tag(CustomBlockTag::PreConfirmed) = starting_block_id {
-            self.create_block();
+            self.create_block().await;
             starting_block_id = CustomBlockId::Tag(CustomBlockTag::Latest);
         }
 
@@ -1475,28 +1476,28 @@ impl Starknet {
     }
 
     /// create new block from pre_confirmed one
-    pub fn create_block(&mut self) {
-        self.generate_new_block_and_state();
+    pub async fn create_block(&mut self) {
+        self.generate_new_block_and_state().await;
     }
 
     // Set time and optionally create a new block
-    pub fn set_time(&mut self, timestamp: u64, create_block: bool) {
+    pub async fn set_time(&mut self, timestamp: u64, create_block: bool) {
         self.set_block_timestamp_shift(
             timestamp as i64 - Starknet::get_unix_timestamp_as_seconds() as i64,
         );
 
         self.set_next_block_timestamp(timestamp);
         if create_block {
-            self.create_block();
+            self.create_block().await;
         }
     }
 
     // Set timestamp shift and create empty block
-    pub fn increase_time(&mut self, time_shift: u64) {
+    pub async fn increase_time(&mut self, time_shift: u64) {
         self.set_block_timestamp_shift(
             self.pre_confirmed_block_timestamp_shift + time_shift as i64,
         );
-        self.create_block()
+        self.create_block().await
     }
 
     // Set timestamp shift for next blocks
@@ -1676,7 +1677,7 @@ mod tests {
 
     /// Initializes starknet with 1 account that doesn't perform actual tx signature validation.
     /// Allows specifying the state archive capacity.
-    pub(crate) fn setup_starknet_with_no_signature_check_account_and_state_capacity(
+    pub(crate) async fn setup_starknet_with_no_signature_check_account_and_state_capacity(
         acc_balance: u128,
         state_archive: StateArchiveCapacity,
     ) -> (Starknet, Account) {
@@ -1690,6 +1691,7 @@ mod tests {
             state_archive,
             ..Default::default()
         })
+        .await
         .unwrap();
 
         let account_class = cairo_0_account_without_validations();
@@ -1706,26 +1708,27 @@ mod tests {
         acc.deploy(&mut starknet.pre_confirmed_state).unwrap();
 
         starknet.commit_diff().unwrap();
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
         starknet.restart_pre_confirmed_block();
 
         (starknet, acc)
     }
 
     /// Initializes starknet with 1 account that doesn't perform actual tx signature validation.
-    pub(crate) fn setup_starknet_with_no_signature_check_account(
+    pub(crate) async fn setup_starknet_with_no_signature_check_account(
         acc_balance: u128,
     ) -> (Starknet, Account) {
         setup_starknet_with_no_signature_check_account_and_state_capacity(
             acc_balance,
             StateArchiveCapacity::None,
         )
+        .await
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn correct_initial_state_with_test_config() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
         let predeployed_accounts = starknet.predeployed_accounts.get_accounts();
         let expected_balance = config.predeployed_accounts_initial_balance;
 
@@ -1768,7 +1771,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn pre_confirmed_block_is_correct() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
         let initial_block_number = starknet.block_context.block_info().block_number;
         starknet.generate_pre_confirmed_block();
 
@@ -1781,7 +1784,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn correct_new_block_creation() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         let tx = dummy_declare_tx_v3_with_hash();
 
@@ -1793,7 +1796,7 @@ mod tests {
         // blocks collection should not be empty
         assert_eq!(starknet.blocks.hash_to_block.len(), 1);
 
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
         // blocks collection should not be empty
         assert_eq!(starknet.blocks.hash_to_block.len(), 2);
 
@@ -1808,7 +1811,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn successful_emptying_of_pre_confirmed_block() {
         let config = StarknetConfig { start_time: Some(0), ..Default::default() };
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         let initial_block_number = starknet.block_context.block_info().block_number;
         let initial_gas_price_wei =
@@ -1873,7 +1876,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn getting_state_of_latest_block() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
         starknet
             .get_mut_state_at(&CustomBlockId::Tag(CustomBlockTag::Latest))
             .expect("Should be OK");
@@ -1882,7 +1885,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn getting_state_of_pre_confirmed_block() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
         starknet
             .get_mut_state_at(&CustomBlockId::Tag(CustomBlockTag::PreConfirmed))
             .expect("Should be OK");
@@ -1892,8 +1895,8 @@ mod tests {
     async fn getting_state_at_block_by_nonexistent_hash_with_full_state_archive() {
         let config =
             StarknetConfig { state_archive: StateArchiveCapacity::Full, ..Default::default() };
-        let mut starknet = Starknet::new(&config).unwrap();
-        starknet.generate_new_block_and_state();
+        let mut starknet = Starknet::new(&config).await.unwrap();
+        starknet.generate_new_block_and_state().await;
 
         match starknet.get_mut_state_at(&CustomBlockId::Hash(Felt::ZERO)) {
             Err(Error::NoBlock) => (),
@@ -1905,9 +1908,9 @@ mod tests {
     async fn getting_nonexistent_state_at_block_by_number_with_full_state_archive() {
         let config =
             StarknetConfig { state_archive: StateArchiveCapacity::Full, ..Default::default() };
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
         let genesis_block_hash = starknet.get_latest_block().unwrap();
-        let block_hash = starknet.generate_new_block_and_state();
+        let block_hash = starknet.generate_new_block_and_state().await;
         starknet.blocks.hash_to_state.remove(&block_hash);
         starknet.blocks.last_block_hash = Some(genesis_block_hash.block_hash());
 
@@ -1920,8 +1923,8 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn getting_state_at_without_state_archive() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
-        starknet.generate_new_block_and_state();
+        let mut starknet = Starknet::new(&config).await.unwrap();
+        starknet.generate_new_block_and_state().await;
 
         match starknet.get_mut_state_at(&CustomBlockId::Number(0)) {
             Err(Error::NoStateAtBlock { .. }) => (),
@@ -1932,7 +1935,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn assert_expected_predeclared_account_classes() {
         let config = StarknetConfig { predeclare_argent: true, ..Default::default() };
-        let starknet = Starknet::new(&config).unwrap();
+        let starknet = Starknet::new(&config).await.unwrap();
         for class_hash in [
             ARGENT_CONTRACT_CLASS_HASH,
             ARGENT_MULTISIG_CONTRACT_CLASS_HASH,
@@ -1949,7 +1952,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn calling_method_of_undeployed_contract() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         let undeployed_address = Felt::from_hex_unchecked("0x1234");
         let entry_point_selector = get_selector_from_name("balanceOf").unwrap();
@@ -1968,7 +1971,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn calling_nonexistent_contract_method() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         let predeployed_account = &starknet.predeployed_accounts.get_accounts()[0];
         let entry_point_selector = get_selector_from_name("nonExistentMethod").unwrap();
@@ -2001,7 +2004,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn getting_balance_of_predeployed_contract() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         let predeployed_account = &starknet.predeployed_accounts.get_accounts()[0].clone();
         let result = get_balance_at(&mut starknet, predeployed_account.account_address).unwrap();
@@ -2013,7 +2016,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn getting_balance_of_undeployed_contract() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         let undeployed_address = ContractAddress::new(Felt::from_hex_unchecked("0x1234")).unwrap();
         let result = get_balance_at(&mut starknet, undeployed_address).unwrap();
@@ -2025,7 +2028,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn correct_latest_block() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
         // last added block number -> 0
         let added_block =
@@ -2035,7 +2038,7 @@ mod tests {
 
         assert_eq!(block_number.0, added_block.header.block_header_without_hash.block_number.0);
 
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
 
         let added_block2 =
             starknet.blocks.get_by_hash(starknet.blocks.last_block_hash.unwrap()).unwrap();
@@ -2047,7 +2050,7 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn returns_chain_id() {
         let config = StarknetConfig::default();
-        let starknet = Starknet::new(&config).unwrap();
+        let starknet = Starknet::new(&config).await.unwrap();
         let chain_id = starknet.chain_id();
 
         assert_eq!(chain_id.to_string(), DEVNET_DEFAULT_CHAIN_ID.to_string());
@@ -2059,10 +2062,11 @@ mod tests {
             state_archive: StateArchiveCapacity::Full,
             ..Default::default()
         })
+        .await
         .expect("Could not start Devnet");
 
         // generate initial block with empty state
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
 
         // **generate second block**
         // add data to state
@@ -2074,7 +2078,7 @@ mod tests {
 
         // generate new block and save the state
         starknet.commit_diff().unwrap();
-        let second_block = starknet.generate_new_block_and_state();
+        let second_block = starknet.generate_new_block_and_state().await;
 
         // **generate third block**
         // add data to state
@@ -2086,7 +2090,7 @@ mod tests {
 
         // generate new block and save the state
         starknet.commit_diff().unwrap();
-        let third_block = starknet.generate_new_block_and_state();
+        let third_block = starknet.generate_new_block_and_state().await;
 
         // check modified state at block 1 and 2 to contain the correct value for the nonce
         let second_block_address_nonce = starknet
@@ -2113,11 +2117,11 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn gets_latest_block() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
-        starknet.generate_new_block_and_state();
-        starknet.generate_new_block_and_state();
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
+        starknet.generate_new_block_and_state().await;
+        starknet.generate_new_block_and_state().await;
 
         let latest_block = starknet.get_latest_block();
 
@@ -2126,9 +2130,9 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn check_timestamp_of_newly_generated_block() {
         let config = StarknetConfig::default();
-        let mut starknet = Starknet::new(&config).unwrap();
+        let mut starknet = Starknet::new(&config).await.unwrap();
 
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
         starknet
             .blocks
             .pre_confirmed_block
@@ -2138,7 +2142,7 @@ mod tests {
 
         let sleep_duration_secs = 5;
         thread::sleep(Duration::from_secs(sleep_duration_secs));
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
 
         let block_timestamp =
             starknet.get_latest_block().unwrap().header.block_header_without_hash.timestamp;
@@ -2154,10 +2158,11 @@ mod tests {
             state_archive: StateArchiveCapacity::None,
             ..Default::default()
         })
+        .await
         .unwrap();
 
         let dummy_hash = felt_from_prefixed_hex("0x42").unwrap();
-        match starknet.abort_blocks(CustomBlockId::Hash(dummy_hash)) {
+        match starknet.abort_blocks(CustomBlockId::Hash(dummy_hash)).await {
             Err(Error::UnsupportedAction { msg }) => {
                 assert!(msg.contains("state-archive-capacity"))
             }
@@ -2171,10 +2176,11 @@ mod tests {
             state_archive: StateArchiveCapacity::Full,
             ..Default::default()
         })
+        .await
         .unwrap();
 
         let dummy_hash = felt_from_prefixed_hex("0x42").unwrap();
-        match starknet.abort_blocks(CustomBlockId::Hash(dummy_hash)) {
+        match starknet.abort_blocks(CustomBlockId::Hash(dummy_hash)).await {
             Err(Error::NoBlock) => (),
             unexpected => panic!("Got unexpected response: {unexpected:?}"),
         }
@@ -2182,7 +2188,8 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn receipt_should_have_block_properties_after_tx_is_accepted() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
         starknet.config.block_generation_on = BlockGenerationOn::Demand;
 
         let tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -2191,7 +2198,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e9 as u64),
         );
 
-        let (tx_hash, _) = starknet.add_declare_transaction(tx.into()).unwrap();
+        let (tx_hash, _) = starknet.add_declare_transaction(tx.into()).await.unwrap();
 
         let receipt = starknet.get_transaction_receipt_by_hash(&tx_hash).unwrap();
         match receipt {
@@ -2203,7 +2210,7 @@ mod tests {
         }
 
         // receipt should have block params after accepting the tx by triggering block creation
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
         let latest_block = starknet.get_block(&CustomBlockId::Tag(CustomBlockTag::Latest)).unwrap();
 
         let receipt = starknet.get_transaction_receipt_by_hash(&tx_hash).unwrap();

@@ -44,7 +44,7 @@ fn check_class_size(
     Ok(())
 }
 
-pub fn add_declare_transaction(
+pub async fn add_declare_transaction(
     starknet: &mut Starknet,
     broadcasted_declare_transaction: BroadcastedDeclareTransaction,
 ) -> DevnetResult<(TransactionHash, ClassHash)> {
@@ -108,7 +108,7 @@ pub fn add_declare_transaction(
         state.declare_contract_class(class_hash, casm_hash, contract_class)?;
     }
 
-    starknet.handle_accepted_transaction(transaction, execution_info)?;
+    starknet.handle_accepted_transaction(transaction, execution_info).await?;
 
     Ok((transaction_hash, class_hash))
 }
@@ -181,7 +181,8 @@ mod tests {
         };
 
         let result = Starknet::default()
-            .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_tx)));
+            .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_tx)))
+            .await;
 
         match result {
             Err(Error::UnsupportedAction { msg }) => {
@@ -211,7 +212,8 @@ mod tests {
         };
 
         let result = Starknet::default()
-            .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_tx)));
+            .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_tx)))
+            .await;
 
         match result {
             Err(Error::TransactionValidationError(
@@ -223,7 +225,8 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn add_declare_v3_transaction_successful_execution() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -232,7 +235,7 @@ mod tests {
         );
 
         let (tx_hash, class_hash) =
-            starknet.add_declare_transaction(declare_tx.clone().into()).unwrap();
+            starknet.add_declare_transaction(declare_tx.clone().into()).await.unwrap();
 
         let tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
 
@@ -253,7 +256,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn add_declare_v3_transaction_should_return_an_error_due_to_low_gas_bounds() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(20000);
+        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(20000).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -261,7 +264,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1, 1),
         );
 
-        match starknet.add_declare_transaction(declare_tx.into()) {
+        match starknet.add_declare_transaction(declare_tx.into()).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -270,8 +273,9 @@ mod tests {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-    async fn add_declare_v3_transaction_should_return_an_error_due_to_not_enough_balance_on_account() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1);
+    async fn add_declare_v3_transaction_should_return_an_error_due_to_not_enough_balance_on_account()
+     {
+        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -279,7 +283,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e9 as u64),
         );
 
-        match starknet.add_declare_transaction(declare_tx.into()).unwrap_err() {
+        match starknet.add_declare_transaction(declare_tx.into()).await.unwrap_err() {
             Error::TransactionValidationError(
                 TransactionValidationError::InsufficientAccountBalance,
             ) => {}
@@ -289,7 +293,8 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declare_v3_transaction_successful_storage_change() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -302,7 +307,8 @@ mod tests {
             ContractClass::Cairo1(declare_tx.contract_class.clone()).try_generate_hash().unwrap();
         assert!(!starknet.pre_confirmed_state.is_contract_declared(expected_class_hash));
 
-        let (tx_hash, class_hash) = starknet.add_declare_transaction(declare_tx.into()).unwrap();
+        let (tx_hash, class_hash) =
+            starknet.add_declare_transaction(declare_tx.into()).await.unwrap();
 
         let tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
 
@@ -316,7 +322,8 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declare_tx_should_fail_if_nonce_repeated() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
 
         let tx_nonce = Felt::ZERO;
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -331,7 +338,7 @@ mod tests {
         assert!(!starknet.pre_confirmed_state.is_contract_declared(expected_class_hash));
 
         let (tx_hash, class_hash) =
-            starknet.add_declare_transaction(declare_tx.clone().into()).unwrap();
+            starknet.add_declare_transaction(declare_tx.clone().into()).await.unwrap();
 
         let tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
 
@@ -342,7 +349,7 @@ mod tests {
         // check if contract is declared
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
 
-        match starknet.add_declare_transaction(declare_tx.into()) {
+        match starknet.add_declare_transaction(declare_tx.into()).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InvalidTransactionNonce {
                     address,
@@ -361,17 +368,18 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declare_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
-        declare_tx_should_fail_if_nonce_higher_than_expected(BlockGenerationOn::Transaction);
+        declare_tx_should_fail_if_nonce_higher_than_expected(BlockGenerationOn::Transaction).await;
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declare_tx_should_fail_if_nonce_higher_than_expected_in_block_on_demand_mode() {
-        declare_tx_should_fail_if_nonce_higher_than_expected(BlockGenerationOn::Demand);
+        declare_tx_should_fail_if_nonce_higher_than_expected(BlockGenerationOn::Demand).await;
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declaration_success_should_depend_on_class_size_limit() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -385,20 +393,22 @@ mod tests {
         // Ideally would be set to (size - 1), but serialization is not the same for the class used
         // here and the one in `add_declare_transaction`.
         starknet.config.class_size_config.maximum_contract_class_size = 1;
-        match starknet.add_declare_transaction(declare_tx.clone().into()) {
+        match starknet.add_declare_transaction(declare_tx.clone().into()).await {
             Err(Error::ContractClassSizeIsTooLarge) => (),
             other => panic!("Unexpected declaration result: {other:?}"),
         };
 
         // Should pass
         starknet.config.class_size_config.maximum_contract_class_size = old_limit;
-        let (_tx_hash, class_hash) = starknet.add_declare_transaction(declare_tx.into()).unwrap();
+        let (_tx_hash, class_hash) =
+            starknet.add_declare_transaction(declare_tx.into()).await.unwrap();
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declaration_success_should_depend_on_bytecode_size_limit() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -412,20 +422,22 @@ mod tests {
         // Ideally would be set to (size - 1), but serialization is not the same for the class used
         // here and the one in `add_declare_transaction`.
         starknet.config.class_size_config.maximum_contract_bytecode_size = 1;
-        match starknet.add_declare_transaction(declare_tx.clone().into()) {
+        match starknet.add_declare_transaction(declare_tx.clone().into()).await {
             Err(Error::ContractClassSizeIsTooLarge) => (),
             other => panic!("Unexpected declaration result: {other:?}"),
         };
 
         // Should pass
         starknet.config.class_size_config.maximum_contract_bytecode_size = old_limit;
-        let (_tx_hash, class_hash) = starknet.add_declare_transaction(declare_tx.into()).unwrap();
+        let (_tx_hash, class_hash) =
+            starknet.add_declare_transaction(declare_tx.into()).await.unwrap();
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn declaration_success_should_depend_on_sierra_length_limit() {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
             sender.account_address,
@@ -437,21 +449,23 @@ mod tests {
 
         // Should fail
         starknet.config.class_size_config.maximum_sierra_length = sierra_length - 1;
-        match starknet.add_declare_transaction(declare_tx.clone().into()) {
+        match starknet.add_declare_transaction(declare_tx.clone().into()).await {
             Err(Error::ContractClassSizeIsTooLarge) => (),
             other => panic!("Unexpected declaration result: {other:?}"),
         };
 
         // Should pass
         starknet.config.class_size_config.maximum_sierra_length = sierra_length;
-        let (_tx_hash, class_hash) = starknet.add_declare_transaction(declare_tx.into()).unwrap();
+        let (_tx_hash, class_hash) =
+            starknet.add_declare_transaction(declare_tx.into()).await.unwrap();
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
-    fn declare_tx_should_fail_if_nonce_higher_than_expected(
+    async fn declare_tx_should_fail_if_nonce_higher_than_expected(
         block_generation_mode: BlockGenerationOn,
     ) {
-        let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+        let (mut starknet, sender) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
         starknet.config.block_generation_on = block_generation_mode;
 
         let tx_nonce = Felt::ONE; // nonce too high
@@ -466,7 +480,7 @@ mod tests {
             ContractClass::Cairo1(declare_tx.contract_class.clone()).try_generate_hash().unwrap();
         assert!(!starknet.pre_confirmed_state.is_contract_declared(expected_class_hash));
 
-        match starknet.add_declare_transaction(declare_tx.into()) {
+        match starknet.add_declare_transaction(declare_tx.into()).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InvalidTransactionNonce {
                     address,

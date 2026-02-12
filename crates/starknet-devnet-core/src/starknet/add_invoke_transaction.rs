@@ -10,7 +10,7 @@ use starknet_types::rpc::transactions::{
 use super::Starknet;
 use crate::error::{DevnetResult, Error, TransactionValidationError};
 
-pub fn add_invoke_transaction(
+pub async fn add_invoke_transaction(
     starknet: &mut Starknet,
     broadcasted_invoke_transaction: BroadcastedInvokeTransaction,
 ) -> DevnetResult<TransactionHash> {
@@ -63,7 +63,7 @@ pub fn add_invoke_transaction(
 
     let transaction = TransactionWithHash::new(transaction_hash, invoke_transaction);
 
-    starknet.handle_accepted_transaction(transaction, execution_info)?;
+    starknet.handle_accepted_transaction(transaction, execution_info).await?;
 
     Ok(transaction_hash)
 }
@@ -118,7 +118,7 @@ mod tests {
         let BroadcastedInvokeTransaction::V3(ref mut tx_v3) = invoke_transaction;
         tx_v3.common.version = Felt::THREE + QUERY_VERSION_OFFSET;
 
-        let result = Starknet::default().add_invoke_transaction(invoke_transaction);
+        let result = Starknet::default().add_invoke_transaction(invoke_transaction).await;
         match result {
             Err(crate::error::Error::UnsupportedAction { msg }) => {
                 assert_eq!(msg, "only-query transactions are not supported")
@@ -149,7 +149,7 @@ mod tests {
             resource_bounds_with_price_1(biguint_to_u64(&initial_balance), 0, 0),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
 
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
@@ -180,7 +180,7 @@ mod tests {
             resource_bounds_with_price_1(gas_amount, gas_amount, gas_amount),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
 
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
@@ -218,7 +218,7 @@ mod tests {
                 resource_bounds_with_price_1(l1_gas, l1_data_gas, l2_gas),
             );
 
-            match starknet.add_invoke_transaction(invoke_transaction) {
+            match starknet.add_invoke_transaction(invoke_transaction).await {
                 Err(Error::TransactionValidationError(
                     TransactionValidationError::InsufficientResourcesForValidate,
                 )) => {}
@@ -254,7 +254,7 @@ mod tests {
         );
 
         // invoke transaction
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::AcceptedOnL2);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -275,7 +275,7 @@ mod tests {
         );
 
         // invoke transaction again
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -298,7 +298,7 @@ mod tests {
             resource_bounds_with_price_1(0, 0, 0),
         );
 
-        match Starknet::default().add_invoke_transaction(tx) {
+        match Starknet::default().add_invoke_transaction(tx).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -311,7 +311,8 @@ mod tests {
         invoke_tx_should_fail_if_nonce_repeated(
             BlockGenerationOn::Demand,
             TransactionFinalityStatus::PreConfirmed,
-        );
+        )
+        .await;
     }
 
     #[tokio::test(flavor = "multi_thread")]
@@ -319,10 +320,11 @@ mod tests {
         invoke_tx_should_fail_if_nonce_repeated(
             BlockGenerationOn::Transaction,
             TransactionFinalityStatus::AcceptedOnL2,
-        );
+        )
+        .await;
     }
 
-    fn invoke_tx_should_fail_if_nonce_repeated(
+    async fn invoke_tx_should_fail_if_nonce_repeated(
         block_generation_mode: BlockGenerationOn,
         expected_finality_status: TransactionFinalityStatus,
     ) {
@@ -342,7 +344,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, l2_gas),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(tx.clone()).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(tx.clone()).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, expected_finality_status);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -358,7 +360,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, l2_gas * 2),
         );
 
-        match starknet.add_invoke_transaction(tx) {
+        match starknet.add_invoke_transaction(tx).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InvalidTransactionNonce {
                     address,
@@ -397,7 +399,7 @@ mod tests {
             resource_bounds_with_price_1(0, 128, 520_000),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(tx).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(tx).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::AcceptedOnL2);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Reverted);
@@ -422,7 +424,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e6 as u64),
         );
 
-        match starknet.add_invoke_transaction(tx) {
+        match starknet.add_invoke_transaction(tx).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InvalidTransactionNonce {
                     address,
@@ -452,7 +454,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e6 as u64),
         );
 
-        let tx_hash = starknet.add_invoke_transaction(tx).unwrap();
+        let tx_hash = starknet.add_invoke_transaction(tx).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::PreConfirmed);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -474,7 +476,7 @@ mod tests {
                 resource_bounds_with_price_1(0, 1000, 1e6 as u64),
             );
 
-            let tx_hash = starknet.add_invoke_transaction(tx).unwrap();
+            let tx_hash = starknet.add_invoke_transaction(tx).await.unwrap();
             let retrieved_tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
             assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::PreConfirmed);
             assert_eq!(

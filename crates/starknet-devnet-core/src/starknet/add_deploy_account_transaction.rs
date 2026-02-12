@@ -11,7 +11,7 @@ use super::Starknet;
 use crate::error::{DevnetResult, Error, TransactionValidationError};
 use crate::state::CustomStateReader;
 
-pub fn add_deploy_account_transaction(
+pub async fn add_deploy_account_transaction(
     starknet: &mut Starknet,
     broadcasted_deploy_account_transaction: BroadcastedDeployAccountTransaction,
 ) -> DevnetResult<(TransactionHash, ContractAddress)> {
@@ -63,7 +63,7 @@ pub fn add_deploy_account_transaction(
     }
     .execute(&mut starknet.pre_confirmed_state.state, &starknet.block_context)?;
 
-    starknet.handle_accepted_transaction(transaction, execution_info)?;
+    starknet.handle_accepted_transaction(transaction, execution_info).await?;
 
     Ok((transaction_hash, address))
 }
@@ -136,9 +136,11 @@ mod tests {
             test_deploy_account_transaction_v3(Felt::default(), 0, 10, 0, 0);
         deploy_account_transaction.common.version = Felt::THREE + QUERY_VERSION_OFFSET;
 
-        let result = Starknet::default().add_deploy_account_transaction(
-            BroadcastedDeployAccountTransaction::V3(deploy_account_transaction),
-        );
+        let result = Starknet::default()
+            .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(
+                deploy_account_transaction,
+            ))
+            .await;
 
         match result {
             Err(crate::error::Error::UnsupportedAction { msg }) => {
@@ -153,7 +155,10 @@ mod tests {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 0, 0, 0);
 
-        match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
+        match starknet
+            .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx))
+            .await
+        {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -166,7 +171,10 @@ mod tests {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 4000, 0, 0);
 
-        match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
+        match starknet
+            .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx))
+            .await
+        {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientAccountBalance,
             )) => {}
@@ -202,7 +210,10 @@ mod tests {
     async fn deploy_account_transaction_v3_should_return_an_error_if_insufficient_l1_gas_bounds() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 1, 0, 0);
-        match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
+        match starknet
+            .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx))
+            .await
+        {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -211,10 +222,14 @@ mod tests {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-    async fn deploy_account_transaction_v3_should_return_an_error_if_only_l1_and_l2_gas_specified() {
+    async fn deploy_account_transaction_v3_should_return_an_error_if_only_l1_and_l2_gas_specified()
+    {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 1000, 0, 1e7 as u64);
-        match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
+        match starknet
+            .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx))
+            .await
+        {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -226,7 +241,10 @@ mod tests {
     async fn deploy_account_transaction_v3_should_return_an_error_if_insufficient_l2_gas_bounds() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 1000, 1000, 1);
-        match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
+        match starknet
+            .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx))
+            .await
+        {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -234,7 +252,12 @@ mod tests {
         }
     }
 
-    fn successfully_deploy_acc_v3(init_balance: u64, l1_gas: u64, l1_data_gas: u64, l2_gas: u64) {
+    async fn successfully_deploy_acc_v3(
+        init_balance: u64,
+        l1_gas: u64,
+        l1_data_gas: u64,
+        l2_gas: u64,
+    ) {
         let (mut starknet, account_class_hash) = setup();
         let transaction =
             test_deploy_account_transaction_v3(account_class_hash, 0, l1_gas, l1_data_gas, l2_gas);
@@ -249,6 +272,7 @@ mod tests {
 
         let (txn_hash, _) = starknet
             .add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(transaction))
+            .await
             .unwrap();
         let txn = starknet.transactions.get_by_hash_mut(&txn_hash).unwrap();
 
@@ -267,12 +291,12 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_deploy_account_transaction_v3_successful_execution_if_only_l1_gas() {
-        successfully_deploy_acc_v3(1e6 as u64, 4000, 0, 0);
+        successfully_deploy_acc_v3(1e6 as u64, 4000, 0, 0).await;
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_deploy_account_transaction_v3_successful_execution_if_all_gas_bounds() {
-        successfully_deploy_acc_v3(1e8 as u64, 0, 1000, 1e7 as u64);
+        successfully_deploy_acc_v3(1e8 as u64, 0, 1000, 1e7 as u64).await;
     }
 
     /// Initializes starknet with erc20 contracts, 1 declared contract class. Gas price is set to 1

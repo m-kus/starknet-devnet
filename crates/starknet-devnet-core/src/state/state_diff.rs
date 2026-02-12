@@ -335,6 +335,7 @@ mod tests {
             l2_gas_price_fri: nonzero!(1u128),
             ..Default::default()
         })
+        .await
         .unwrap();
 
         let account_without_validations_contract_class = cairo_0_account_without_validations();
@@ -355,7 +356,7 @@ mod tests {
         account.deploy(&mut starknet.pre_confirmed_state).unwrap();
 
         starknet.commit_diff().unwrap();
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
         starknet.restart_pre_confirmed_block();
 
         // dummy contract
@@ -385,6 +386,7 @@ mod tests {
                         resource_bounds_with_price_1(0, 1000, 1e9 as u64),
                     ),
                 )))
+                .await
                 .unwrap();
         }
 
@@ -397,7 +399,7 @@ mod tests {
             .unwrap();
 
         starknet.commit_diff().unwrap();
-        starknet.generate_new_block_and_state();
+        starknet.generate_new_block_and_state().await;
         starknet.restart_pre_confirmed_block();
 
         let new_class_hash = ContractClass::Cairo1(replacing_contract).try_generate_hash().unwrap();
@@ -411,7 +413,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e7 as u64),
         );
 
-        starknet.add_invoke_transaction(invoke_txn).unwrap();
+        starknet.add_invoke_transaction(invoke_txn).await.unwrap();
 
         let state_update = starknet.block_state_update(&BlockId::Tag(BlockTag::Latest)).unwrap();
 

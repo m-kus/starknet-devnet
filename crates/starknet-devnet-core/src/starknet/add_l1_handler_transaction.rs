@@ -8,7 +8,7 @@ use tracing::trace;
 use super::Starknet;
 use crate::error::DevnetResult;
 
-pub fn add_l1_handler_transaction(
+pub async fn add_l1_handler_transaction(
     starknet: &mut Starknet,
     transaction: L1HandlerTransaction,
 ) -> DevnetResult<TransactionHash> {
@@ -21,10 +21,12 @@ pub fn add_l1_handler_transaction(
         blockifier::transaction::transaction_execution::Transaction::L1Handler(executable_tx)
             .execute(&mut starknet.pre_confirmed_state.state, &starknet.block_context)?;
 
-    starknet.handle_accepted_transaction(
-        TransactionWithHash::new(transaction_hash, Transaction::L1Handler(transaction.clone())),
-        execution_info,
-    )?;
+    starknet
+        .handle_accepted_transaction(
+            TransactionWithHash::new(transaction_hash, Transaction::L1Handler(transaction.clone())),
+            execution_info,
+        )
+        .await?;
 
     // If L1 tx hash present, store the generated L2 tx hash in its messaging entry.
     // Not done as part of `handle_transaction_result` as it is specific to this tx type.
@@ -112,7 +114,7 @@ mod tests {
             vec![Felt::from(11), Felt::from(9999)],
         );
 
-        let transaction_hash = starknet.add_l1_handler_transaction(transaction).unwrap();
+        let transaction_hash = starknet.add_l1_handler_transaction(transaction).await.unwrap();
 
         let state_transaction = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
@@ -134,7 +136,7 @@ mod tests {
             vec![Felt::from(11), Felt::from(9999)],
         );
 
-        let tx_hash = starknet.add_l1_handler_transaction(tx).unwrap();
+        let tx_hash = starknet.add_l1_handler_transaction(tx).await.unwrap();
 
         let trace = match starknet.get_transaction_trace_by_hash(tx_hash) {
             Ok(TransactionTrace::L1Handler(trace)) => trace,

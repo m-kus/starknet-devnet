@@ -93,7 +93,8 @@ mod tests {
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e18 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let declare_txn = broadcasted_declare_tx_v3_of_dummy_class(
             account.account_address,
@@ -104,6 +105,7 @@ mod tests {
         let expected: ContractClass = declare_txn.contract_class.clone().into();
         let (_, class_hash) = starknet
             .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_txn)))
+            .await
             .unwrap();
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
@@ -119,7 +121,8 @@ mod tests {
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         let block_id = BlockId::Number(block_number.0);
@@ -135,11 +138,12 @@ mod tests {
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::None,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         let block_id = BlockId::Number(block_number.0);
-        starknet.create_block(); // makes the queried block non-latest (and unsupported)
+        starknet.create_block().await; // makes the queried block non-latest (and unsupported)
 
         let class_hash = starknet.get_class_hash_at(&block_id, account.account_address);
         match class_hash.err().unwrap() {
@@ -154,7 +158,8 @@ mod tests {
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         let block_id = BlockId::Number(block_number.0);
@@ -169,7 +174,8 @@ mod tests {
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         // class not present before the latest block

@@ -297,7 +297,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn pagination_for_latest_block_that_has_1_transaction_with_5_events() {
-        let starknet = setup();
+        let starknet = setup().await;
 
         // no pagination to the latest block events
         let (events, has_more) = get_events(
@@ -351,7 +351,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn pagination_for_events_of_multiple_blocks() {
-        let starknet = setup();
+        let starknet = setup().await;
 
         // returns all events from all blocks
         let (events, has_more) =
@@ -384,7 +384,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn check_correct_events_being_returned() {
-        let starknet = setup();
+        let starknet = setup().await;
 
         // events with key 15 should be only 1 in the 5th transaction
         let (events, _) = get_events(
@@ -428,10 +428,10 @@ mod tests {
         }
     }
 
-    fn setup() -> Starknet {
+    async fn setup() -> Starknet {
         // generate 5 transactions
         // each transaction should have events count equal to the order of the transaction
-        let mut starknet = Starknet::new(&StarknetConfig::default()).unwrap();
+        let mut starknet = Starknet::new(&StarknetConfig::default()).await.unwrap();
 
         let mut transaction = dummy_declare_tx_v3_with_hash();
 
@@ -443,7 +443,7 @@ mod tests {
             let transaction_hash = Felt::from(idx as u128 + 100);
             transaction = TransactionWithHash::new(transaction_hash, transaction.transaction);
 
-            starknet.handle_accepted_transaction(transaction.clone(), txn_info).unwrap();
+            starknet.handle_accepted_transaction(transaction.clone(), txn_info).await.unwrap();
         }
 
         assert_eq!(
