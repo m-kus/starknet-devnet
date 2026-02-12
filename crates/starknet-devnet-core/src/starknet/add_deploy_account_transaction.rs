@@ -130,8 +130,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn account_deploy_transaction_v3_with_query_version_should_return_an_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn account_deploy_transaction_v3_with_query_version_should_return_an_error() {
         let mut deploy_account_transaction =
             test_deploy_account_transaction_v3(Felt::default(), 0, 10, 0, 0);
         deploy_account_transaction.common.version = Felt::THREE + QUERY_VERSION_OFFSET;
@@ -148,8 +148,8 @@ mod tests {
         };
     }
 
-    #[test]
-    fn deploy_account_transaction_v3_with_zero_gas_bounds_should_return_an_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn deploy_account_transaction_v3_with_zero_gas_bounds_should_return_an_error() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 0, 0, 0);
 
@@ -161,8 +161,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn deploy_account_transaction_v3_should_return_an_error_due_to_not_enough_balance() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn deploy_account_transaction_v3_should_return_an_error_due_to_not_enough_balance() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 4000, 0, 0);
 
@@ -198,8 +198,8 @@ mod tests {
             .unwrap();
     }
 
-    #[test]
-    fn deploy_account_transaction_v3_should_return_an_error_if_insufficient_l1_gas_bounds() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn deploy_account_transaction_v3_should_return_an_error_if_insufficient_l1_gas_bounds() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 1, 0, 0);
         match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
@@ -210,8 +210,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn deploy_account_transaction_v3_should_return_an_error_if_only_l1_and_l2_gas_specified() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn deploy_account_transaction_v3_should_return_an_error_if_only_l1_and_l2_gas_specified() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 1000, 0, 1e7 as u64);
         match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
@@ -222,8 +222,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn deploy_account_transaction_v3_should_return_an_error_if_insufficient_l2_gas_bounds() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn deploy_account_transaction_v3_should_return_an_error_if_insufficient_l2_gas_bounds() {
         let (mut starknet, account_class_hash) = setup();
         let tx = test_deploy_account_transaction_v3(account_class_hash, 0, 1000, 1000, 1);
         match starknet.add_deploy_account_transaction(BroadcastedDeployAccountTransaction::V3(tx)) {
@@ -265,13 +265,13 @@ mod tests {
         assert!(account_balance_before_deployment > account_balance_after_deployment);
     }
 
-    #[test]
-    fn test_deploy_account_transaction_v3_successful_execution_if_only_l1_gas() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn test_deploy_account_transaction_v3_successful_execution_if_only_l1_gas() {
         successfully_deploy_acc_v3(1e6 as u64, 4000, 0, 0);
     }
 
-    #[test]
-    fn test_deploy_account_transaction_v3_successful_execution_if_all_gas_bounds() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn test_deploy_account_transaction_v3_successful_execution_if_all_gas_bounds() {
         successfully_deploy_acc_v3(1e8 as u64, 0, 1000, 1e7 as u64);
     }
 

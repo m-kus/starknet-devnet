@@ -264,8 +264,8 @@ mod tests {
         dummy_felt, dummy_key_pair, resource_bounds_with_price_1, test_invoke_transaction_v3,
     };
 
-    #[test]
-    fn correct_no_difference_between_non_modified_states() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_no_difference_between_non_modified_states() {
         let mut state = setup();
         let block_number = 1;
         let new_classes = state.rpc_contract_classes.write().commit(block_number);
@@ -274,8 +274,8 @@ mod tests {
         assert_eq!(generated_diff, expected_diff);
     }
 
-    #[test]
-    fn correct_difference_on_cairo1_class_declaration() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_difference_on_cairo1_class_declaration() {
         let mut state = setup();
 
         let class_hash = ClassHash(Felt::ONE);
@@ -300,8 +300,8 @@ mod tests {
         assert_eq!(generated_diff, expected_diff);
     }
 
-    #[test]
-    fn correct_difference_in_state_diff_object() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_difference_in_state_diff_object() {
         let mut state = setup();
         let class_hash = dummy_felt();
         let contract_address = dummy_contract_address();
@@ -324,8 +324,8 @@ mod tests {
         assert_eq!(generated_diff, expected_diff);
     }
 
-    #[test]
-    fn test_class_replacement_produces_correct_state_diff() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn test_class_replacement_produces_correct_state_diff() {
         let mut starknet = Starknet::new(&StarknetConfig {
             gas_price_wei: nonzero!(1u128),
             gas_price_fri: nonzero!(1u128),

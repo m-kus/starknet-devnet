@@ -161,8 +161,8 @@ mod tests {
         dummy_contract_address, dummy_felt, resource_bounds_with_price_1,
     };
 
-    #[test]
-    fn declare_transaction_v3_with_query_version_should_return_an_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declare_transaction_v3_with_query_version_should_return_an_error() {
         let declare_tx = BroadcastedDeclareTransactionV3 {
             common: BroadcastedTransactionCommonV3 {
                 version: Felt::THREE + QUERY_VERSION_OFFSET,
@@ -191,8 +191,8 @@ mod tests {
         };
     }
 
-    #[test]
-    fn declare_transaction_v3_with_zero_gas_bounds_should_return_an_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declare_transaction_v3_with_zero_gas_bounds_should_return_an_error() {
         let declare_tx = BroadcastedDeclareTransactionV3 {
             common: BroadcastedTransactionCommonV3 {
                 version: Felt::THREE + QUERY_VERSION_OFFSET,
@@ -221,8 +221,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn add_declare_v3_transaction_successful_execution() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn add_declare_v3_transaction_successful_execution() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -251,8 +251,8 @@ mod tests {
             .unwrap();
     }
 
-    #[test]
-    fn add_declare_v3_transaction_should_return_an_error_due_to_low_gas_bounds() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn add_declare_v3_transaction_should_return_an_error_due_to_low_gas_bounds() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(20000);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -269,8 +269,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn add_declare_v3_transaction_should_return_an_error_due_to_not_enough_balance_on_account() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn add_declare_v3_transaction_should_return_an_error_due_to_not_enough_balance_on_account() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -287,8 +287,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn declare_v3_transaction_successful_storage_change() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declare_v3_transaction_successful_storage_change() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -314,8 +314,8 @@ mod tests {
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
-    #[test]
-    fn declare_tx_should_fail_if_nonce_repeated() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declare_tx_should_fail_if_nonce_repeated() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
 
         let tx_nonce = Felt::ZERO;
@@ -359,18 +359,18 @@ mod tests {
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
-    #[test]
-    fn declare_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declare_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
         declare_tx_should_fail_if_nonce_higher_than_expected(BlockGenerationOn::Transaction);
     }
 
-    #[test]
-    fn declare_tx_should_fail_if_nonce_higher_than_expected_in_block_on_demand_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declare_tx_should_fail_if_nonce_higher_than_expected_in_block_on_demand_mode() {
         declare_tx_should_fail_if_nonce_higher_than_expected(BlockGenerationOn::Demand);
     }
 
-    #[test]
-    fn declaration_success_should_depend_on_class_size_limit() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declaration_success_should_depend_on_class_size_limit() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -396,8 +396,8 @@ mod tests {
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
-    #[test]
-    fn declaration_success_should_depend_on_bytecode_size_limit() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declaration_success_should_depend_on_bytecode_size_limit() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(
@@ -423,8 +423,8 @@ mod tests {
         assert!(starknet.pre_confirmed_state.is_contract_declared(class_hash));
     }
 
-    #[test]
-    fn declaration_success_should_depend_on_sierra_length_limit() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn declaration_success_should_depend_on_sierra_length_limit() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
 
         let declare_tx = broadcasted_declare_tx_v3_of_dummy_class(

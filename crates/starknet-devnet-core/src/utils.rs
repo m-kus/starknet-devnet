@@ -62,7 +62,6 @@ pub(crate) fn custom_bouncer_config() -> BouncerConfig {
             ..BouncerWeights::max()
         },
         builtin_weights: BuiltinWeights::default(),
-        blake_weight: 5263, // from BouncerConfig::default
     }
 }
 
@@ -242,6 +241,7 @@ pub(crate) mod test_utils {
             sender_address: account_address,
             calldata,
             account_deployment_data: vec![],
+            proof_facts: vec![],
         })
     }
 }

@@ -432,15 +432,18 @@ impl Starknet {
             .map(|tx| tx.into())
             .collect();
 
-        let thin_state_diff = self.pre_confirmed_state_diff.clone().into();
+        let thin_state_diff: starknet_api::state::ThinStateDiff =
+            self.pre_confirmed_state_diff.clone().into();
 
         if !self.config.lite_mode {
-            let commitments = calculate_block_commitments(
-                &transaction_data,
-                &thin_state_diff,
-                l1_da_mode,
-                &starknet_version,
-            );
+            let commitments = tokio::task::block_in_place(|| {
+                tokio::runtime::Handle::current().block_on(calculate_block_commitments(
+                    &transaction_data,
+                    thin_state_diff.clone(),
+                    l1_da_mode,
+                    &starknet_version,
+                ))
+            });
             new_block.set_commitments(commitments);
         }
 
@@ -544,6 +547,7 @@ impl Starknet {
         let block_info = BlockInfo {
             block_number: BlockNumber(block_number),
             block_timestamp: BlockTimestamp(0),
+            starknet_version: Default::default(),
             sequencer_address: starknet_api::contract_address!("0x1000"),
             gas_prices: GasPrices {
                 eth_gas_prices: GasPriceVector {
@@ -921,6 +925,7 @@ impl Starknet {
                 fee_data_availability_mode: DataAvailabilityMode::L1,
             },
             account_deployment_data: vec![],
+            proof_facts: vec![],
         };
 
         // generate signature by signing the tx hash
@@ -1717,8 +1722,8 @@ mod tests {
         )
     }
 
-    #[test]
-    fn correct_initial_state_with_test_config() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_initial_state_with_test_config() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
         let predeployed_accounts = starknet.predeployed_accounts.get_accounts();
@@ -1735,8 +1740,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn correct_block_context_creation() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_block_context_creation() {
         let fee_token_address =
             ContractAddress::new(felt_from_prefixed_hex("0xAA").unwrap()).unwrap();
         let block_ctx = Starknet::init_block_context(
@@ -1760,8 +1765,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn pre_confirmed_block_is_correct() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn pre_confirmed_block_is_correct() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
         let initial_block_number = starknet.block_context.block_info().block_number;
@@ -1773,8 +1778,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn correct_new_block_creation() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_new_block_creation() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -1800,8 +1805,8 @@ mod tests {
         assert_eq!(*added_block.get_transactions().first().unwrap(), *tx.get_transaction_hash());
     }
 
-    #[test]
-    fn successful_emptying_of_pre_confirmed_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn successful_emptying_of_pre_confirmed_block() {
         let config = StarknetConfig { start_time: Some(0), ..Default::default() };
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -1845,8 +1850,8 @@ mod tests {
         assert_eq!(header.sequencer.0, initial_sequencer);
     }
 
-    #[test]
-    fn correct_block_context_update() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_block_context_update() {
         let mut block_ctx = Starknet::init_block_context(
             nonzero!(1u128),
             nonzero!(1u128),
@@ -1865,8 +1870,8 @@ mod tests {
         assert_eq!(block_ctx.block_info().block_number, initial_block_number.next().unwrap());
     }
 
-    #[test]
-    fn getting_state_of_latest_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_state_of_latest_block() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
         starknet
@@ -1874,8 +1879,8 @@ mod tests {
             .expect("Should be OK");
     }
 
-    #[test]
-    fn getting_state_of_pre_confirmed_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_state_of_pre_confirmed_block() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
         starknet
@@ -1883,8 +1888,8 @@ mod tests {
             .expect("Should be OK");
     }
 
-    #[test]
-    fn getting_state_at_block_by_nonexistent_hash_with_full_state_archive() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_state_at_block_by_nonexistent_hash_with_full_state_archive() {
         let config =
             StarknetConfig { state_archive: StateArchiveCapacity::Full, ..Default::default() };
         let mut starknet = Starknet::new(&config).unwrap();
@@ -1896,8 +1901,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn getting_nonexistent_state_at_block_by_number_with_full_state_archive() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_nonexistent_state_at_block_by_number_with_full_state_archive() {
         let config =
             StarknetConfig { state_archive: StateArchiveCapacity::Full, ..Default::default() };
         let mut starknet = Starknet::new(&config).unwrap();
@@ -1912,8 +1917,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn getting_state_at_without_state_archive() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_state_at_without_state_archive() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
         starknet.generate_new_block_and_state();
@@ -1924,8 +1929,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn assert_expected_predeclared_account_classes() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn assert_expected_predeclared_account_classes() {
         let config = StarknetConfig { predeclare_argent: true, ..Default::default() };
         let starknet = Starknet::new(&config).unwrap();
         for class_hash in [
@@ -1941,8 +1946,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn calling_method_of_undeployed_contract() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn calling_method_of_undeployed_contract() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -1960,8 +1965,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn calling_nonexistent_contract_method() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn calling_nonexistent_contract_method() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -1993,8 +1998,8 @@ mod tests {
         )
     }
 
-    #[test]
-    fn getting_balance_of_predeployed_contract() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_balance_of_predeployed_contract() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -2005,8 +2010,8 @@ mod tests {
         assert_eq!(result, balance_uint256);
     }
 
-    #[test]
-    fn getting_balance_of_undeployed_contract() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn getting_balance_of_undeployed_contract() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -2017,8 +2022,8 @@ mod tests {
         assert_eq!(result, expected_balance_uint256);
     }
 
-    #[test]
-    fn correct_latest_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_latest_block() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -2039,8 +2044,8 @@ mod tests {
         assert_eq!(block_number2.0, added_block2.header.block_header_without_hash.block_number.0);
     }
 
-    #[test]
-    fn returns_chain_id() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn returns_chain_id() {
         let config = StarknetConfig::default();
         let starknet = Starknet::new(&config).unwrap();
         let chain_id = starknet.chain_id();
@@ -2048,8 +2053,8 @@ mod tests {
         assert_eq!(chain_id.to_string(), DEVNET_DEFAULT_CHAIN_ID.to_string());
     }
 
-    #[test]
-    fn correct_state_at_specific_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn correct_state_at_specific_block() {
         let mut starknet = Starknet::new(&StarknetConfig {
             state_archive: StateArchiveCapacity::Full,
             ..Default::default()
@@ -2105,8 +2110,8 @@ mod tests {
         assert_eq!(third_block_expected_address_nonce, third_block_address_nonce.0);
     }
 
-    #[test]
-    fn gets_latest_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn gets_latest_block() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -2118,8 +2123,8 @@ mod tests {
 
         assert_eq!(latest_block.unwrap().block_number(), BlockNumber(3));
     }
-    #[test]
-    fn check_timestamp_of_newly_generated_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn check_timestamp_of_newly_generated_block() {
         let config = StarknetConfig::default();
         let mut starknet = Starknet::new(&config).unwrap();
 
@@ -2143,8 +2148,8 @@ mod tests {
         assert!(pre_confirmed_block_timestamp.0 + sleep_duration_secs <= block_timestamp.0);
     }
 
-    #[test]
-    fn test_block_abortion_when_state_archive_capacity_not_full() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn test_block_abortion_when_state_archive_capacity_not_full() {
         let mut starknet = Starknet::new(&StarknetConfig {
             state_archive: StateArchiveCapacity::None,
             ..Default::default()
@@ -2160,8 +2165,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn test_abortion_of_non_existent_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn test_abortion_of_non_existent_block() {
         let mut starknet = Starknet::new(&StarknetConfig {
             state_archive: StateArchiveCapacity::Full,
             ..Default::default()
@@ -2175,8 +2180,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn receipt_should_have_block_properties_after_tx_is_accepted() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn receipt_should_have_block_properties_after_tx_is_accepted() {
         let (mut starknet, sender) = setup_starknet_with_no_signature_check_account(1e18 as u128);
         starknet.config.block_generation_on = BlockGenerationOn::Demand;
 

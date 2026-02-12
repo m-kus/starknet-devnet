@@ -70,8 +70,8 @@ mod tests {
     use crate::utils::exported_test_utils::dummy_cairo_l1l2_contract;
     use crate::utils::test_utils::{cairo_0_account_without_validations, dummy_key_pair};
 
-    #[test]
-    fn l1_handler_transaction_hash_computation() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn l1_handler_transaction_hash_computation() {
         let from_address = "0x000000000000000000000000be3C44c09bc1a3566F3e1CA12e5AbA0fA4Ca72Be";
         let to_address = "0x039dc79e64f4bb3289240f88e0bae7d21735bef0d1a51b2bf3c4730cb16983e1";
         let selector = "0x02f15cff7b0eed8b9beb162696cf4e3e0e35fa7032af69cd1b7d2ac67a13f40f";
@@ -101,8 +101,8 @@ mod tests {
         assert_eq!(l1_handler_transaction_hash, transaction_hash);
     }
 
-    #[test]
-    fn l1_handler_transaction_successful_execution() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn l1_handler_transaction_successful_execution() {
         let (mut starknet, _account_address, contract_address, deposit_selector, _) = setup();
 
         let transaction = get_l1_handler_tx(
@@ -123,8 +123,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn l1_handler_transaction_not_l1_handler_entrypoint() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn l1_handler_transaction_not_l1_handler_entrypoint() {
         let (mut starknet, _account_address, contract_address, _, withdraw_selector) = setup();
 
         let tx = get_l1_handler_tx(

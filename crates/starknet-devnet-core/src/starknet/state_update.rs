@@ -34,9 +34,9 @@ mod tests {
         broadcasted_declare_tx_v3, dummy_cairo_1_contract_class, resource_bounds_with_price_1,
     };
 
-    #[test]
+    #[tokio::test(flavor = "multi_thread")]
     /// This test checks that the state update is correct after a declare transaction v3.
-    fn correct_state_update_after_declare_transaction_v3() {
+    async fn correct_state_update_after_declare_transaction_v3() {
         let (mut starknet, acc) = setup_starknet_with_no_signature_check_account(1e18 as u128);
         let contract_class = dummy_cairo_1_contract_class();
         let compiled_class_hash =

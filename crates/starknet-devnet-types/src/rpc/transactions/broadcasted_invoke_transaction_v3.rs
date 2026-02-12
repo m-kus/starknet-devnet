@@ -16,6 +16,8 @@ pub struct BroadcastedInvokeTransactionV3 {
     pub sender_address: ContractAddress,
     pub calldata: Calldata,
     pub account_deployment_data: Vec<Felt>,
+    #[serde(default)]
+    pub proof_facts: Vec<Felt>,
 }
 
 impl BroadcastedInvokeTransactionV3 {
@@ -39,6 +41,9 @@ impl BroadcastedInvokeTransactionV3 {
             account_deployment_data: starknet_api::transaction::fields::AccountDeploymentData(
                 self.account_deployment_data.clone(),
             ),
+            proof_facts: starknet_api::transaction::fields::ProofFacts(Arc::new(
+                self.proof_facts.clone(),
+            )),
         };
 
         Ok(starknet_api::transaction::InvokeTransaction::V3(sn_api_transaction))

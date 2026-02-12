@@ -104,8 +104,8 @@ mod tests {
         resource_bounds_with_price_1, test_invoke_transaction_v3,
     };
 
-    #[test]
-    fn invoke_transaction_v3_with_only_query_version_should_return_an_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_with_only_query_version_should_return_an_error() {
         let mut invoke_transaction = test_invoke_transaction_v3(
             dummy_contract_address(),
             dummy_contract_address(),
@@ -133,8 +133,8 @@ mod tests {
         parts[0]
     }
 
-    #[test]
-    fn invoke_transaction_v3_successful_execution_with_only_l1_gas() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_successful_execution_with_only_l1_gas() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         let account_address = account.get_address();
         let initial_balance =
@@ -161,8 +161,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn invoke_transaction_v3_successful_execution_with_all_three_gas_bounds() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_successful_execution_with_all_three_gas_bounds() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         let account_address = account.get_address();
         let initial_balance =
@@ -192,8 +192,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn invoke_transaction_v3_with_invalid_gas_amounts() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_with_invalid_gas_amounts() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         let account_address = account.get_address();
 
@@ -229,8 +229,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn invoke_transaction_v1_successfully_changes_storage() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v1_successfully_changes_storage() {
         let (
             mut starknet,
             account,
@@ -286,8 +286,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn invoke_transaction_v3_with_zero_gas_bounds_should_return_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_with_zero_gas_bounds_should_return_error() {
         let nonce = 0;
         let tx = test_invoke_transaction_v3(
             dummy_contract_address(),
@@ -306,16 +306,16 @@ mod tests {
         }
     }
 
-    #[test]
-    fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_demand_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_demand_mode() {
         invoke_tx_should_fail_if_nonce_repeated(
             BlockGenerationOn::Demand,
             TransactionFinalityStatus::PreConfirmed,
         );
     }
 
-    #[test]
-    fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_tx_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_tx_mode() {
         invoke_tx_should_fail_if_nonce_repeated(
             BlockGenerationOn::Transaction,
             TransactionFinalityStatus::AcceptedOnL2,
@@ -373,8 +373,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn nonce_should_be_incremented_if_invoke_reverted() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn nonce_should_be_incremented_if_invoke_reverted() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
 
         let account_address = account.get_address().into();
@@ -407,8 +407,8 @@ mod tests {
         assert_eq!(nonce_after_reverted, Nonce(Felt::ONE));
     }
 
-    #[test]
-    fn invoke_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         starknet.config.block_generation_on = BlockGenerationOn::Transaction;
 
@@ -437,8 +437,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn invoke_tx_should_pass_if_nonce_higher_than_expected_in_block_on_demand_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_pass_if_nonce_higher_than_expected_in_block_on_demand_mode() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         starknet.config.block_generation_on = BlockGenerationOn::Demand;
 
@@ -459,8 +459,8 @@ mod tests {
         assert_eq!(retrieved_tx.block_number, Some(BlockNumber(0)));
     }
 
-    #[test]
-    fn txs_with_successive_nonces_are_acceptable_in_the_same_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn txs_with_successive_nonces_are_acceptable_in_the_same_block() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         starknet.config.block_generation_on = BlockGenerationOn::Demand;
 

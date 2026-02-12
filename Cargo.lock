@@ -111,7 +111,7 @@ dependencies = [
  "auto_impl",
  "borsh",
  "c-kzg",
- "derive_more 2.1.1",
+ "derive_more",
  "either",
  "k256",
  "once_cell",
@@ -161,9 +161,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-core"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dcfbc46fa201350bf859add798d818bbe68b84882a8af832e4433791d28a975d"
+checksum = "3bad0f48b9fe97029db0de15bb29a75f5f84848530673ba271b78216947d3877"
 dependencies = [
  "alloy-dyn-abi",
  "alloy-json-abi",
@@ -174,9 +174,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-dyn-abi"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14ff5ee5f27aa305bda825c735f686ad71bb65508158f059f513895abe69b8c3"
+checksum = "e6ab1b2f1b48a7e6b3597cb2afae04f93879fb69d71e39736b5663d7366b23f2"
 dependencies = [
  "alloy-json-abi",
  "alloy-primitives",
@@ -254,7 +254,7 @@ dependencies = [
  "auto_impl",
  "borsh",
  "c-kzg",
- "derive_more 2.1.1",
+ "derive_more",
  "either",
  "serde",
  "serde_with",
@@ -279,9 +279,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-json-abi"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8708475665cc00e081c085886e68eada2f64cfa08fc668213a9231655093d4de"
+checksum = "1e414aa37b335ad2acb78a95814c59d137d53139b412f87aed1e10e2d862cd49"
 dependencies = [
  "alloy-primitives",
  "alloy-sol-type-parser",
@@ -323,7 +323,7 @@ dependencies = [
  "alloy-sol-types",
  "async-trait",
  "auto_impl",
- "derive_more 2.1.1",
+ "derive_more",
  "futures-utils-wasm",
  "serde",
  "serde_json",
@@ -345,15 +345,15 @@ dependencies = [
 
 [[package]]
 name = "alloy-primitives"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b88cf92ed20685979ed1d8472422f0c6c2d010cec77caf63aaa7669cc1a7bc2"
+checksum = "66b1483f8c2562bf35f0270b697d5b5fe8170464e935bd855a4c5eaf6f89b354"
 dependencies = [
  "alloy-rlp",
  "bytes",
  "cfg-if",
  "const-hex",
- "derive_more 2.1.1",
+ "derive_more",
  "foldhash 0.2.0",
  "hashbrown 0.16.1",
  "indexmap 2.13.0",
@@ -428,7 +428,7 @@ checksum = "ce8849c74c9ca0f5a03da1c865e3eb6f768df816e67dd3721a398a8a7e398011"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -542,23 +542,23 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-macro"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f5fa1ca7e617c634d2bd9fa71f9ec8e47c07106e248b9fcbd3eaddc13cabd625"
+checksum = "2c4b64c8146291f750c3f391dff2dd40cf896f7e2b253417a31e342aa7265baa"
 dependencies = [
  "alloy-sol-macro-expander",
  "alloy-sol-macro-input",
  "proc-macro-error2",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
 name = "alloy-sol-macro-expander"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27c00c0c3a75150a9dc7c8c679ca21853a137888b4e1c5569f92d7e2b15b5102"
+checksum = "d9df903674682f9bae8d43fdea535ab48df2d6a8cb5104ca29c58ada22ef67b3"
 dependencies = [
  "alloy-json-abi",
  "alloy-sol-macro-input",
@@ -569,15 +569,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "sha3",
- "syn 2.0.114",
+ "syn 2.0.115",
  "syn-solidity",
 ]
 
 [[package]]
 name = "alloy-sol-macro-input"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "297db260eb4d67c105f68d6ba11b8874eec681caec5505eab8fbebee97f790bc"
+checksum = "737b8a959f527a86e07c44656db237024a32ae9b97d449f788262a547e8aa136"
 dependencies = [
  "alloy-json-abi",
  "const-hex",
@@ -587,15 +587,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "serde_json",
- "syn 2.0.114",
+ "syn 2.0.115",
  "syn-solidity",
 ]
 
 [[package]]
 name = "alloy-sol-type-parser"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94b91b13181d3bcd23680fd29d7bc861d1f33fbe90fdd0af67162434aeba902d"
+checksum = "b28e6e86c6d2db52654b65a5a76b4f57eae5a32a7f0aa2222d1dbdb74e2cb8e0"
 dependencies = [
  "serde",
  "winnow",
@@ -603,9 +603,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-types"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc442cc2a75207b708d481314098a0f8b6f7b58e3148dd8d8cc7407b0d6f9385"
+checksum = "fdf7effe4ab0a4f52c865959f790036e61a7983f68b13b75d7fbcedf20b753ce"
 dependencies = [
  "alloy-json-abi",
  "alloy-primitives",
@@ -622,7 +622,7 @@ dependencies = [
  "alloy-json-rpc",
  "auto_impl",
  "base64 0.22.1",
- "derive_more 2.1.1",
+ "derive_more",
  "futures",
  "futures-utils-wasm",
  "parking_lot 0.12.5",
@@ -661,7 +661,7 @@ dependencies = [
  "alloy-primitives",
  "alloy-rlp",
  "arrayvec",
- "derive_more 2.1.1",
+ "derive_more",
  "nybbles",
  "serde",
  "smallvec",
@@ -678,7 +678,7 @@ dependencies = [
  "darling 0.21.3",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -748,14 +748,13 @@ checksum = "5f0e0fee31ef5ed1ba1316088939cea399010ed7731dba877ed44aeb407a75ea"
 
 [[package]]
 name = "apollo_compilation_utils"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b860e444fc3047527163ec7e0171323bd831f22c8e89a98e607715f3c50dcf9c"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_infra_utils",
- "cairo-lang-sierra 2.12.3",
+ "cairo-lang-sierra 2.15.0",
  "cairo-lang-starknet-classes",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "rlimit",
  "serde",
  "serde_json",
@@ -767,9 +766,8 @@ dependencies = [
 
 [[package]]
 name = "apollo_compile_to_native"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9f1c875c600127ce06d89c4283bdefdecfe92ea953d52a4847398c29a342bad6"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_compilation_utils",
  "apollo_compile_to_native_types",
@@ -781,9 +779,8 @@ dependencies = [
 
 [[package]]
 name = "apollo_compile_to_native_types"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04abf08b9a1c958f16307c9ff48ed1fb5dfe0e90f10f78bcc21c055f051209e4"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_config",
  "serde",
@@ -792,9 +789,8 @@ dependencies = [
 
 [[package]]
 name = "apollo_config"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3fb39734ba7a0596776fa1e4e4c4d2d32117b927c2b0b526bfe14c4c73743361"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_infra_utils",
  "clap",
@@ -811,14 +807,14 @@ dependencies = [
 
 [[package]]
 name = "apollo_infra_utils"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef50783135b0289f491e738fb3ea57ffccde51e68b12be4d96b8a74db252532c"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_proc_macros",
  "assert-json-diff",
  "colored 3.1.1",
  "num_enum",
+ "regex",
  "serde",
  "serde_json",
  "socket2 0.5.10",
@@ -828,14 +824,14 @@ dependencies = [
  "thiserror 1.0.69",
  "tokio",
  "tracing",
+ "tracing-subscriber",
  "url",
 ]
 
 [[package]]
 name = "apollo_metrics"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2a070146c18fea3fb7e42931ddb52828baf8e64cabc9873ea8f978f118c4fbe"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "indexmap 2.13.0",
  "metrics",
@@ -846,21 +842,19 @@ dependencies = [
 
 [[package]]
 name = "apollo_proc_macros"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b177fec2f66debebbe1d39bf5e4c8680037f58f877c9527fb9a1885f7300135"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "lazy_static",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
 name = "apollo_sizeof"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b230dd6ebc0c6cfe7ef87c9c3bbf760063b40b6b7b469b43fb216994033569f"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_sizeof_macros",
  "starknet-types-core",
@@ -868,13 +862,12 @@ dependencies = [
 
 [[package]]
 name = "apollo_sizeof_macros"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6b83d9b1feea5e65bccc822427caf564f5fc85cdcae116b2a87b72f1fd606c6"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -888,24 +881,7 @@ dependencies = [
  "proc-macro-error2",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
-]
-
-[[package]]
-name = "ark-ec"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "defd9a439d56ac24968cca0571f598a61bc8c55f71d50a89cda591cb750670ba"
-dependencies = [
- "ark-ff 0.4.2",
- "ark-poly 0.4.2",
- "ark-serialize 0.4.2",
- "ark-std 0.4.0",
- "derivative",
- "hashbrown 0.13.2",
- "itertools 0.10.5",
- "num-traits",
- "zeroize",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -916,7 +892,7 @@ checksum = "43d68f2d516162846c1238e755a7c4d131b892b70cc70c471a8e3ca3ed818fce"
 dependencies = [
  "ahash",
  "ark-ff 0.5.0",
- "ark-poly 0.5.0",
+ "ark-poly",
  "ark-serialize 0.5.0",
  "ark-std 0.5.0",
  "educe 0.6.0",
@@ -1014,7 +990,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62945a2f7e6de02a31fe400aa489f0e0f5b2502e69f95f853adb82a96c7a6b60"
 dependencies = [
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1052,20 +1028,7 @@ dependencies = [
  "num-traits",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
-]
-
-[[package]]
-name = "ark-poly"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d320bfc44ee185d899ccbadfa8bc31aab923ce1558716e1997a1e74057fe86bf"
-dependencies = [
- "ark-ff 0.4.2",
- "ark-serialize 0.4.2",
- "ark-std 0.4.0",
- "derivative",
- "hashbrown 0.13.2",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1085,35 +1048,13 @@ dependencies = [
 
 [[package]]
 name = "ark-secp256k1"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c02e954eaeb4ddb29613fee20840c2bbc85ca4396d53e33837e11905363c5f2"
-dependencies = [
- "ark-ec 0.4.2",
- "ark-ff 0.4.2",
- "ark-std 0.4.0",
-]
-
-[[package]]
-name = "ark-secp256k1"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8bd211c48debd3037b48873a7aa22c3aba034e83388aa4124795c9f220b88c7"
 dependencies = [
- "ark-ec 0.5.0",
+ "ark-ec",
  "ark-ff 0.5.0",
  "ark-std 0.5.0",
-]
-
-[[package]]
-name = "ark-secp256r1"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3975a01b0a6e3eae0f72ec7ca8598a6620fc72fa5981f6f5cca33b7cd788f633"
-dependencies = [
- "ark-ec 0.4.2",
- "ark-ff 0.4.2",
- "ark-std 0.4.0",
 ]
 
 [[package]]
@@ -1122,7 +1063,7 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5cf8be5820de567729bfa73a410ddd07cec8ad102d9a4bf61fd6b2e60db264e8"
 dependencies = [
- "ark-ec 0.5.0",
+ "ark-ec",
  "ark-ff 0.5.0",
  "ark-std 0.5.0",
 ]
@@ -1143,7 +1084,6 @@ version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "adb7b85a02b83d2f22f89bd5cac66c9c89474240cb6207cb1efc16d098e822a5"
 dependencies = [
- "ark-serialize-derive 0.4.2",
  "ark-std 0.4.0",
  "digest 0.10.7",
  "num-bigint",
@@ -1155,22 +1095,11 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f4d068aaf107ebcd7dfb52bc748f8030e0fc930ac8e360146ca54c1203088f7"
 dependencies = [
- "ark-serialize-derive 0.5.0",
+ "ark-serialize-derive",
  "ark-std 0.5.0",
  "arrayvec",
  "digest 0.10.7",
  "num-bigint",
-]
-
-[[package]]
-name = "ark-serialize-derive"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae3281bc6d0fd7e549af32b52511e1302185bd688fd3359fa36423346ff682ea"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -1181,7 +1110,7 @@ checksum = "213888f660fddcca0d257e88e54ac05bca01885f258ccdf695bafd77031bb69d"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1289,7 +1218,7 @@ checksum = "c7c24de15d275a1ecfd47a380fb4d5ec9bfe0933f309ed5e705b775596a3574d"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1300,7 +1229,7 @@ checksum = "9035ad2d096bed7955a320ee7e2230574d28fd3c3a0f186cbea1ff3c7eed5dbb"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1328,7 +1257,7 @@ checksum = "ffdcb70bdbc4d478427380519163274ac86e52916e10f0a8889adf0f96d3fee7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1472,7 +1401,7 @@ dependencies = [
  "regex",
  "rustc-hash 2.1.1",
  "shlex",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -1565,9 +1494,8 @@ dependencies = [
 
 [[package]]
 name = "blockifier"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b550a0722401d283cd20b6b778d81d784d7efe3dedc3a2417f5366275b30a0fa"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "anyhow",
  "apollo_compilation_utils",
@@ -1576,20 +1504,20 @@ dependencies = [
  "apollo_config",
  "apollo_infra_utils",
  "apollo_metrics",
- "ark-ec 0.4.2",
- "ark-ff 0.4.2",
- "ark-secp256k1 0.4.0",
- "ark-secp256r1 0.4.0",
+ "ark-ec",
+ "ark-ff 0.5.0",
+ "ark-secp256k1",
+ "ark-secp256r1",
  "blockifier_test_utils",
  "cached",
- "cairo-lang-casm 2.12.3",
+ "cairo-lang-casm 2.15.0",
  "cairo-lang-runner",
  "cairo-lang-starknet-classes",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "cairo-native",
  "cairo-vm",
  "dashmap",
- "derive_more 0.99.20",
+ "derive_more",
  "indexmap 2.13.0",
  "itertools 0.12.1",
  "keccak",
@@ -1614,9 +1542,8 @@ dependencies = [
 
 [[package]]
 name = "blockifier_test_utils"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e6d81a301fcbef9e69e13949d22505ec9116c20cbb763b3c242eda560340946"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_infra_utils",
  "cairo-lang-starknet-classes",
@@ -1666,8 +1593,14 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
+
+[[package]]
+name = "boxcar"
+version = "0.2.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36f64beae40a84da1b4b26ff2761a5b895c12adc41dc25aaee1c4f2bbfe97a6e"
 
 [[package]]
 name = "brotli"
@@ -1807,11 +1740,11 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-casm"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d1d84a85b59c753aa4a7f0c455a5c815e0aebb89faf0c8ab366b0d87c0bb934"
+checksum = "84e6207b0fd16c0d188e91c81ad4e96bbc6c3cd92e128c832d9fbc87e0a4a11e"
 dependencies = [
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "indoc",
  "num-bigint",
  "num-traits",
@@ -1840,33 +1773,33 @@ dependencies = [
  "cairo-lang-utils 1.0.0-rc0",
  "clap",
  "log",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
  "thiserror 1.0.69",
 ]
 
 [[package]]
 name = "cairo-lang-compiler"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a5cbeb4e134cf29c63d18a235beae3f124bef2824ec45d09d6e18a0c334e509"
+checksum = "e28cc7001d335ea5f8f886e12b1d2ff1cb4d3862d570100ac734ef748eb3f441"
 dependencies = [
  "anyhow",
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-lowering 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-project 2.12.3",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-lowering 2.15.0",
+ "cairo-lang-parser 2.15.0",
+ "cairo-lang-project 2.15.0",
  "cairo-lang-runnable-utils",
- "cairo-lang-semantic 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-generator 2.12.3",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-semantic 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-generator 2.15.0",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "indoc",
  "rayon",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
  "semver 1.0.27",
  "smol_str 0.3.5",
  "thiserror 2.0.18",
@@ -1880,11 +1813,13 @@ checksum = "c99d41a14f98521c617c0673a0faa41fd00029d32106a4643e1291a1813340a7"
 
 [[package]]
 name = "cairo-lang-debug"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa5311e1c31d413f3fa34e40e48b662c19151f0fb4b10467d627a52c93eae918"
+checksum = "3f8fa7f741b25dfe4319c657b32c79ef1fc91c854b45b4d82bb279cba35fbbf5"
 dependencies = [
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
+ "id-arena",
+ "salsa 0.24.0",
 ]
 
 [[package]]
@@ -1901,27 +1836,27 @@ dependencies = [
  "cairo-lang-utils 1.0.0-rc0",
  "indexmap 1.9.3",
  "itertools 0.10.5",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
 ]
 
 [[package]]
 name = "cairo-lang-defs"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "872feccf7b8f70ed5d74c40548bf974fbcc5069b2ea1ae15a9b8f1ab911c536b"
+checksum = "deaaad6ba678b88c88b0723907fd82b28d91831b4ee1c56d65084304cac7b72d"
 dependencies = [
  "bincode",
- "cairo-lang-debug 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-parser 2.15.0",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "itertools 0.14.0",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
  "serde",
- "smol_str 0.3.5",
  "typetag",
  "xxhash-rust",
 ]
@@ -1935,19 +1870,21 @@ dependencies = [
  "cairo-lang-filesystem 1.0.0-rc0",
  "cairo-lang-utils 1.0.0-rc0",
  "itertools 0.10.5",
- "salsa",
+ "salsa 0.16.1",
 ]
 
 [[package]]
 name = "cairo-lang-diagnostics"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d0e7c551a634708366af3003176f2f9cdea56fd4a91c834ddd802030366f6a5"
+checksum = "0bbb39a789267d1ea3c64dc4b5011530df096fd1c32bfe1dc72e0291ddb70e0b"
 dependencies = [
- "cairo-lang-debug 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "itertools 0.14.0",
+ "salsa 0.24.0",
 ]
 
 [[package]]
@@ -1964,11 +1901,11 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-eq-solver"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed04fc3f52d68157f359257c477e30f68dec36bbf568c85d567812583cd5f9c8"
+checksum = "ac789761904a39372635b5e3816f539fd8b4602a215d83c18e226e291a552420"
 dependencies = [
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "good_lp",
 ]
 
@@ -1981,42 +1918,45 @@ dependencies = [
  "cairo-lang-debug 1.1.1",
  "cairo-lang-utils 1.0.0-rc0",
  "path-clean 0.1.0",
- "salsa",
+ "salsa 0.16.1",
  "serde",
  "smol_str 0.2.2",
 ]
 
 [[package]]
 name = "cairo-lang-filesystem"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca1835a43a00a90d5cd4ca3f6bb9178ec450d55458e8b56ac34ca1d6d0ccf58f"
+checksum = "9a13326b1762c69d58d22ccd4df0e4973405aa73f0054aff7f8af7fd73deb88a"
 dependencies = [
- "cairo-lang-debug 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-utils 2.15.0",
+ "itertools 0.14.0",
  "path-clean 1.0.1",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
  "semver 1.0.27",
  "serde",
  "smol_str 0.3.5",
- "toml 0.8.23",
+ "toml 0.9.12+spec-1.1.0",
 ]
 
 [[package]]
 name = "cairo-lang-formatter"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3bd0736456004f1d334bad5b366c6933c4b856a23a5dfade96cfe0a1c5eb3ddb"
+checksum = "ba34c08ac67ac02b3128d564a45582f42334e91cc8a47431e9ed4b95f8389495"
 dependencies = [
  "anyhow",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-parser 2.15.0",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "diffy",
  "ignore",
  "itertools 0.14.0",
+ "salsa 0.24.0",
  "serde",
  "thiserror 2.0.18",
 ]
@@ -2042,35 +1982,38 @@ dependencies = [
  "log",
  "num-bigint",
  "num-traits",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
 ]
 
 [[package]]
 name = "cairo-lang-lowering"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd2e1d66c241fba4f3dc43e42956001940298fb4ea5970acfc8b2db8bf4b6629"
+checksum = "c32179ee954dbef5c26899c960c8d5d7d158dfa83ae8a924799c1932578e353a"
 dependencies = [
  "assert_matches",
  "bincode",
- "cairo-lang-debug 2.12.3",
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-proc-macros 2.12.3",
- "cairo-lang-semantic 2.12.3",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-semantic 2.15.0",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "id-arena",
+ "indent",
  "itertools 0.14.0",
  "log",
  "num-bigint",
  "num-integer",
  "num-traits",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
  "serde",
+ "starknet-types-core",
+ "thiserror 2.0.18",
+ "tracing",
 ]
 
 [[package]]
@@ -2089,29 +2032,28 @@ dependencies = [
  "log",
  "num-bigint",
  "num-traits",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
  "unescaper",
 ]
 
 [[package]]
 name = "cairo-lang-parser"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15c3ab263d4afd34a002dc0e37f9bacca734aa133dbbb8540651d28308977a68"
+checksum = "fa894404dd671130cfb3d86d59dce97df27f565aa92699708d0bc78663cb778e"
 dependencies = [
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
  "cairo-lang-primitive-token",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-syntax-codegen 2.12.4",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-syntax-codegen 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "colored 3.1.1",
  "itertools 0.14.0",
  "num-bigint",
  "num-traits",
- "rust-analyzer-salsa",
- "smol_str 0.3.5",
+ "salsa 0.24.0",
  "unescaper",
 ]
 
@@ -2130,27 +2072,26 @@ dependencies = [
  "cairo-lang-utils 1.0.0-rc0",
  "indoc",
  "itertools 0.10.5",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
 ]
 
 [[package]]
 name = "cairo-lang-plugins"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "566059584384c12fa598ae0e0509fd3d12b3985a25872de22e37245c4bc5762c"
+checksum = "19c46896b74f3e66902d5beda1fed31fb0b8a205a13d9e1868a815d033817105"
 dependencies = [
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-parser 2.15.0",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "indent",
  "indoc",
  "itertools 0.14.0",
- "rust-analyzer-salsa",
- "smol_str 0.3.5",
+ "salsa 0.24.0",
 ]
 
 [[package]]
@@ -2172,13 +2113,15 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-proc-macros"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61599d8cac760505d1913fa5d7dddcf019f22d47f0748ff66b1b58afe1858b62"
+checksum = "a8d5baca5b44cac3178306c82fedbc53ea677908b1682d29c39f03b03eb1d02e"
 dependencies = [
- "cairo-lang-debug 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "salsa 0.24.0",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -2196,30 +2139,30 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-project"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99635e2569cebc31583110b417e6a410990a494c7d56998f2be0a169a1158456"
+checksum = "c08a4ee75ce0fda214d882beb50a7c8d18d6e20107429200536b57d13d76bb7b"
 dependencies = [
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "serde",
  "thiserror 2.0.18",
- "toml 0.8.23",
+ "toml 0.9.12+spec-1.1.0",
 ]
 
 [[package]]
 name = "cairo-lang-runnable-utils"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f747c3d433ec5e82576e59852fd8c86a802fefe55e7bdbb9c0db61adb1a40e7b"
+checksum = "691bfb23661cc39c6f286b0256dc426096662fcae0c5b0d075abdc0e518d3934"
 dependencies = [
- "cairo-lang-casm 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-ap-change 2.12.3",
- "cairo-lang-sierra-gas 2.12.3",
- "cairo-lang-sierra-to-casm 2.12.3",
+ "cairo-lang-casm 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-ap-change 2.15.0",
+ "cairo-lang-sierra-gas 2.15.0",
+ "cairo-lang-sierra-to-casm 2.15.0",
  "cairo-lang-sierra-type-size",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "cairo-vm",
  "itertools 0.14.0",
  "thiserror 2.0.18",
@@ -2227,30 +2170,32 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-runner"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40a9ab4bb286d641463b2253070c145c53ff7e71f29cda2a49915f79ff7db927"
+checksum = "3d66b331e0a59fb52b31f725c8cc2d7112cbc6e85561d8a58b2809b6fa999716"
 dependencies = [
  "ark-ff 0.5.0",
- "ark-secp256k1 0.5.0",
- "ark-secp256r1 0.5.0",
- "cairo-lang-casm 2.12.3",
- "cairo-lang-lowering 2.12.3",
+ "ark-secp256k1",
+ "ark-secp256r1",
+ "cairo-lang-casm 2.15.0",
+ "cairo-lang-lowering 2.15.0",
  "cairo-lang-runnable-utils",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-generator 2.12.3",
- "cairo-lang-sierra-to-casm 2.12.3",
- "cairo-lang-starknet 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-generator 2.15.0",
+ "cairo-lang-sierra-to-casm 2.15.0",
+ "cairo-lang-starknet 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "cairo-vm",
+ "clap",
  "itertools 0.14.0",
  "keccak",
  "num-bigint",
  "num-integer",
  "num-traits",
  "rand 0.9.2",
+ "salsa 0.24.0",
+ "serde",
  "sha2",
- "smol_str 0.3.5",
  "starknet-types-core",
  "thiserror 2.0.18",
 ]
@@ -2274,35 +2219,37 @@ dependencies = [
  "log",
  "num-bigint",
  "num-traits",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
 ]
 
 [[package]]
 name = "cairo-lang-semantic"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf1e01333b127fa3733f2f93b3febc45219ef55b807d196f298cadea6ad8fe44"
+checksum = "83ad7598f3c29e628d5b306afdce4310fe72b123cd55567983dc47eabcb26fee"
 dependencies = [
- "cairo-lang-debug 2.12.3",
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-plugins 2.12.3",
- "cairo-lang-proc-macros 2.12.3",
- "cairo-lang-syntax 2.12.3",
+ "bincode",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-parser 2.15.0",
+ "cairo-lang-plugins 2.15.0",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-syntax 2.15.0",
  "cairo-lang-test-utils",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "id-arena",
  "indoc",
  "itertools 0.14.0",
  "num-bigint",
  "num-traits",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
+ "serde",
  "sha3",
- "smol_str 0.3.5",
- "toml 0.8.23",
+ "starknet-types-core",
+ "toml 0.9.12+spec-1.1.0",
 ]
 
 [[package]]
@@ -2321,7 +2268,7 @@ dependencies = [
  "num-bigint",
  "num-traits",
  "regex",
- "salsa",
+ "salsa 0.16.1",
  "serde",
  "sha3",
  "smol_str 0.2.2",
@@ -2330,14 +2277,14 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-sierra"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "300655046f505cf806a918918e5397b20c22b579d78c2ef09bc7d4d59fd733be"
+checksum = "1f7ab456f23241d2948d8a8795bb032f3a81be48747b970a853924063ffea7c2"
 dependencies = [
  "anyhow",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "const-fnv1a-hash",
- "convert_case 0.8.0",
+ "convert_case 0.10.0",
  "derivative",
  "itertools 0.14.0",
  "lalrpop 0.22.2",
@@ -2346,7 +2293,6 @@ dependencies = [
  "num-integer",
  "num-traits",
  "regex",
- "rust-analyzer-salsa",
  "serde",
  "serde_json",
  "sha3",
@@ -2370,14 +2316,14 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-sierra-ap-change"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c51190f463ac9f7d4a2ce0e0345cfc92334589811a7114eeeec84029999d7f1"
+checksum = "98a3ca83a79e6191dcaa3cbb49dd53aa90176b49f4534b7e72a79f5a3fbb1cb4"
 dependencies = [
- "cairo-lang-eq-solver 2.12.3",
- "cairo-lang-sierra 2.12.3",
+ "cairo-lang-eq-solver 2.15.0",
+ "cairo-lang-sierra 2.15.0",
  "cairo-lang-sierra-type-size",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "itertools 0.14.0",
  "num-bigint",
  "num-traits",
@@ -2399,14 +2345,14 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-sierra-gas"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb0d0f038acd79aedcadad4ad2ad928b0881c4e96a2d9ad0e0b3173a6111f313"
+checksum = "a5e2f9b5c7befa27d7cdb70ee03c8bd44309ecf6e16d439909c692770e733e1a"
 dependencies = [
- "cairo-lang-eq-solver 2.12.3",
- "cairo-lang-sierra 2.12.3",
+ "cairo-lang-eq-solver 2.15.0",
+ "cairo-lang-sierra 2.15.0",
  "cairo-lang-sierra-type-size",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "itertools 0.14.0",
  "num-bigint",
  "num-traits",
@@ -2435,29 +2381,29 @@ dependencies = [
  "indexmap 1.9.3",
  "itertools 0.10.5",
  "num-bigint",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
 ]
 
 [[package]]
 name = "cairo-lang-sierra-generator"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bc8d2a89273ba24529319982a4a7833f2a6c4a87752baea2bc70ceb4b3285b7"
+checksum = "75afecf1adf1a1418b6b4865e694fd2f6e784551f2f812a28b2e33dd4c7c7d0b"
 dependencies = [
- "cairo-lang-debug 2.12.3",
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-lowering 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-semantic 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-lowering 2.15.0",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-semantic 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "itertools 0.14.0",
  "num-traits",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
  "serde",
  "serde_json",
  "smol_str 0.3.5",
@@ -2488,17 +2434,17 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-sierra-to-casm"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c852277442b2d8ca9741cdc8ccb737c6ad381d300ab4e2d982a98ba40e5f5b6"
+checksum = "5c20590351b15f1522023386d3385de34baee1ea47339729994dcff16faadd7c"
 dependencies = [
  "assert_matches",
- "cairo-lang-casm 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-ap-change 2.12.3",
- "cairo-lang-sierra-gas 2.12.3",
+ "cairo-lang-casm 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-ap-change 2.15.0",
+ "cairo-lang-sierra-gas 2.15.0",
  "cairo-lang-sierra-type-size",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "indoc",
  "itertools 0.14.0",
  "num-bigint",
@@ -2509,12 +2455,12 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-sierra-type-size"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "265aa8daaa94cc4d5e135a82c0bbe7d28d2c0fbc612332903dbf1a68ed15978f"
+checksum = "9a3c5b27e5f5f6f0bca52fb8e2a6c071d83d24fe09f8d6505b6aab3bed5e1a65"
 dependencies = [
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-utils 2.15.0",
 ]
 
 [[package]]
@@ -2543,7 +2489,7 @@ dependencies = [
  "cairo-lang-utils 1.0.0-rc0",
  "clap",
  "convert_case 0.6.0",
- "genco",
+ "genco 0.17.10",
  "indoc",
  "itertools 0.10.5",
  "log",
@@ -2560,31 +2506,31 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-starknet"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "deb8bf3ccf8fe1f910291d388a2351b6f40ad32be07bdbd3a628e103387b1a48"
+checksum = "03449f446ffa58f6e365b95f2b95520031a6b2be265d6d4d1a33c0eb4e379810"
 dependencies = [
  "anyhow",
- "cairo-lang-compiler 2.12.3",
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-lowering 2.12.3",
- "cairo-lang-parser 2.12.3",
- "cairo-lang-plugins 2.12.3",
- "cairo-lang-semantic 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-generator 2.12.3",
+ "cairo-lang-compiler 2.15.0",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-lowering 2.15.0",
+ "cairo-lang-parser 2.15.0",
+ "cairo-lang-plugins 2.15.0",
+ "cairo-lang-semantic 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-generator 2.15.0",
  "cairo-lang-starknet-classes",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "const_format",
  "indent",
  "indoc",
  "itertools 0.14.0",
+ "salsa 0.24.0",
  "serde",
  "serde_json",
- "smol_str 0.3.5",
  "starknet-types-core",
  "thiserror 2.0.18",
  "typetag",
@@ -2592,15 +2538,16 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-starknet-classes"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4839b63927954a7c3d018fd012ce0bea256db205b85ee45df27fb1e90cb10e02"
+checksum = "fd03f9747aa0071117c17d8c3992c0faff32e870f7e8fb285b748a6d1edeaee0"
 dependencies = [
- "cairo-lang-casm 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-to-casm 2.12.3",
- "cairo-lang-utils 2.12.3",
- "convert_case 0.8.0",
+ "cairo-lang-casm 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-to-casm 2.15.0",
+ "cairo-lang-sierra-type-size",
+ "cairo-lang-utils 2.15.0",
+ "convert_case 0.10.0",
  "itertools 0.14.0",
  "num-bigint",
  "num-integer",
@@ -2624,7 +2571,7 @@ dependencies = [
  "cairo-lang-utils 1.0.0-rc0",
  "num-bigint",
  "num-traits",
- "salsa",
+ "salsa 0.16.1",
  "smol_str 0.2.2",
  "thiserror 1.0.69",
  "unescaper",
@@ -2632,20 +2579,21 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-syntax"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1f83d5b0213ddab04090f4a10d009ff3428a0d6e289f4fea31798210d60d5cb"
+checksum = "92ced2e38a83e79f41518ba9970159ab84d7fc47ed139f0f70db2d060faeb302"
 dependencies = [
- "cairo-lang-debug 2.12.3",
- "cairo-lang-filesystem 2.12.3",
+ "cairo-lang-debug 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
  "cairo-lang-primitive-token",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "num-bigint",
  "num-traits",
- "rust-analyzer-salsa",
+ "salsa 0.24.0",
  "serde",
- "smol_str 0.3.5",
  "unescaper",
+ "vector-map",
 ]
 
 [[package]]
@@ -2655,29 +2603,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7356209993e8f39abaadf26562204b149ae3e0af03114f0d9c2675480df4e2d3"
 dependencies = [
  "cairo-lang-utils 1.0.0-rc0",
- "genco",
+ "genco 0.17.10",
  "log",
  "xshell",
 ]
 
 [[package]]
 name = "cairo-lang-syntax-codegen"
-version = "2.12.4"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78c7a973e8010db56b2e1c6fdb898dbc5b584a769200c9eb264020338730458a"
+checksum = "d12cf2171666fb224b4890906668f5ebcc31a5c91a4ff5a3b681b9d440d1c995"
 dependencies = [
- "genco",
+ "genco 0.19.0",
  "xshell",
 ]
 
 [[package]]
 name = "cairo-lang-test-utils"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ebbd4ebcd82ab07fba3d376a6aa992aa552fcb7f051736f6b5a2122381754bdb"
+checksum = "b2316a0647f8b273bb989f16a44d61e5a71dcb76f8cbdfcc00d2f68734488d3f"
 dependencies = [
  "cairo-lang-formatter",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-proc-macros 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "colored 3.1.1",
  "log",
  "pretty_assertions",
@@ -2702,43 +2651,52 @@ dependencies = [
 
 [[package]]
 name = "cairo-lang-utils"
-version = "2.12.3"
+version = "2.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cca315cce0937801a772bee5fe92cca28b8172421bdd2f67c96e8288a0dcfb9f"
+checksum = "d8469aa1f8361bd76648eade6cb9b18a957841e99937797788b327741de7cab8"
 dependencies = [
- "hashbrown 0.15.5",
+ "hashbrown 0.16.1",
  "indexmap 2.13.0",
  "itertools 0.14.0",
  "num-bigint",
  "num-traits",
  "parity-scale-codec",
- "schemars 0.8.22",
+ "salsa 0.24.0",
+ "schemars 1.2.1",
  "serde",
  "smol_str 0.3.5",
+ "tracing",
+ "tracing-log",
+ "tracing-subscriber",
+ "vector-map",
 ]
 
 [[package]]
 name = "cairo-native"
-version = "0.7.3"
+version = "0.9.0-rc.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ce3a73f176cbb920f729bc528a152a3c717d46e0d4f1023d56096b6aad1186b"
+checksum = "a9f771cd6d92e5aa141a25d36ca6b7477470957538c2c1c662fe972453b45340"
 dependencies = [
  "aquamarine",
- "ark-ec 0.5.0",
+ "ark-ec",
  "ark-ff 0.5.0",
- "ark-secp256k1 0.5.0",
- "ark-secp256r1 0.5.0",
+ "ark-secp256k1",
+ "ark-secp256r1",
  "bumpalo",
+ "cairo-lang-lowering 2.15.0",
  "cairo-lang-runner",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-ap-change 2.12.3",
- "cairo-lang-sierra-gas 2.12.3",
- "cairo-lang-sierra-to-casm 2.12.3",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-ap-change 2.15.0",
+ "cairo-lang-sierra-gas 2.15.0",
+ "cairo-lang-sierra-to-casm 2.15.0",
+ "cairo-lang-sierra-type-size",
+ "cairo-lang-starknet 2.15.0",
  "cairo-lang-starknet-classes",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-utils 2.15.0",
  "educe 0.5.11",
  "itertools 0.14.0",
  "keccak",
+ "lambdaworks-math",
  "lazy_static",
  "libc",
  "libloading",
@@ -2762,16 +2720,15 @@ dependencies = [
 
 [[package]]
 name = "cairo-vm"
-version = "2.5.0"
+version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c21cacdf4e290ab5f0018f24d6bf97f8d3a8809bd09568550669270e7f9ed534"
+checksum = "182965d2ccbc05674f798b30097854ecf015eed695194a3a5fe9b682c4163b9d"
 dependencies = [
  "anyhow",
  "bincode",
  "bitvec",
  "generic-array",
  "hashbrown 0.15.5",
- "hex",
  "indoc",
  "keccak",
  "lazy_static",
@@ -2878,9 +2835,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.57"
+version = "4.5.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6899ea499e3fb9305a65d5ebf6e3d2248c5fab291f300ad0a704fbe142eae31a"
+checksum = "63be97961acde393029492ce0be7a1af7e323e6bae9511ebfac33751be5e6806"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -2888,9 +2845,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.57"
+version = "4.5.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b12c8b680195a62a8364d16b8447b01b6c2c8f9aaf68bee653be34d4245e238"
+checksum = "7f13174bda5dfd69d7e947827e5af4b0f2f94a4a3ee92912fba07a66150f21e2"
 dependencies = [
  "anstream",
  "anstyle",
@@ -2907,14 +2864,14 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
 name = "clap_lex"
-version = "0.7.7"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3e64b0cc0439b12df2fa678eae89a1c56a529fd067a9115f7827f1fffd22b32"
+checksum = "3a822ea5bc7590f9d40f1ba12c0dc3c2760f3482c6984db1573ad11031420831"
 
 [[package]]
 name = "colorchoice"
@@ -3034,12 +2991,6 @@ dependencies = [
 
 [[package]]
 name = "convert_case"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6245d59a3e82a7fc217c5828a6692dbc6dfb63a0c8c90495621f7b9d79704a0e"
-
-[[package]]
-name = "convert_case"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec182b0ca2f35d8fc196cf3404988fd8b8c739a4d270ff118a398feb0cbec1ca"
@@ -3052,15 +3003,6 @@ name = "convert_case"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bb402b8d4c85569410425650ce3eddc7d698ed96d39a73f941b08fb63082f1e7"
-dependencies = [
- "unicode-segmentation",
-]
-
-[[package]]
-name = "convert_case"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "baaaa0ecca5b51987b9423ccdc971514dd8b0bb7b4060b983d3664dad3f1f89f"
 dependencies = [
  "unicode-segmentation",
 ]
@@ -3138,6 +3080,15 @@ name = "crossbeam-epoch"
 version = "0.9.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
+dependencies = [
+ "crossbeam-utils",
+]
+
+[[package]]
+name = "crossbeam-queue"
+version = "0.3.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f58bbc28f91df819d0aa2a2c00cd19754769c2fad90579b3592b1c9ba7a3115"
 dependencies = [
  "crossbeam-utils",
 ]
@@ -3240,7 +3191,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "strsim 0.11.1",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3255,7 +3206,7 @@ dependencies = [
  "quote",
  "serde",
  "strsim 0.11.1",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3277,7 +3228,7 @@ checksum = "fc34b93ccb385b40dc71c6fceac4b2ad23662c7eeb248cf10d529b7e055b6ead"
 dependencies = [
  "darling_core 0.20.11",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3288,7 +3239,7 @@ checksum = "d38308df82d1080de0afee5d069fa14b0326a88c14f15c5ccda35b4a6c414c81"
 dependencies = [
  "darling_core 0.21.3",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3323,9 +3274,9 @@ dependencies = [
 
 [[package]]
 name = "deranged"
-version = "0.5.5"
+version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ececcb659e7ba858fb4f10388c250a7252eb0a27373f1a72b8748afdd248e587"
+checksum = "cc3dc5ad92c2e2d1c193bbbbdf2ea477cb81331de4f3103f267ca18368b988c4"
 dependencies = [
  "powerfmt",
  "serde_core",
@@ -3340,19 +3291,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
-]
-
-[[package]]
-name = "derive_more"
-version = "0.99.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6edb4b64a43d977b8e99788fe3a04d483834fba1215a7e02caa415b626497f7f"
-dependencies = [
- "convert_case 0.4.0",
- "proc-macro2",
- "quote",
- "rustc_version 0.4.1",
- "syn 2.0.114",
 ]
 
 [[package]]
@@ -3374,7 +3312,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustc_version 0.4.1",
- "syn 2.0.114",
+ "syn 2.0.115",
  "unicode-xid",
 ]
 
@@ -3449,7 +3387,7 @@ checksum = "97369cbbc041bc366949bc74d34658d6cda5621039731c6310521892a3a20ae0"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3500,7 +3438,7 @@ dependencies = [
  "enum-ordinalize",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3512,7 +3450,7 @@ dependencies = [
  "enum-ordinalize",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3546,9 +3484,9 @@ dependencies = [
 
 [[package]]
 name = "ena"
-version = "0.14.3"
+version = "0.14.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d248bdd43ce613d87415282f69b9bb99d947d290b10962dd6c56233312c2ad5"
+checksum = "eabffdaee24bd1bf95c5ef7cec31260444317e72ea56c4c91750e8b7ee58d5f1"
 dependencies = [
  "log",
 ]
@@ -3602,7 +3540,7 @@ checksum = "8ca9601fb2d62598ee17836250842873a413586e5d7ed88b356e38ddbb0ec631"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3892,7 +3830,7 @@ checksum = "162ee34ebcb7c64a8abebc059ce0fee27c2262618d7b60ed8faf72fef13c3650"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -3943,7 +3881,18 @@ version = "0.17.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a35958104272e516c2a5f66a9d82fba4784d2b585fc1e2358b8f96e15d342995"
 dependencies = [
- "genco-macros",
+ "genco-macros 0.17.10",
+ "relative-path",
+ "smallvec",
+]
+
+[[package]]
+name = "genco"
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77ab846431e5d637791b3279e7242fe2b21e11c3d8b4cf6a99f645c5f16ba7c0"
+dependencies = [
+ "genco-macros 0.19.0",
  "relative-path",
  "smallvec",
 ]
@@ -3956,7 +3905,18 @@ checksum = "43eaff6bbc0b3a878361aced5ec6a2818ee7c541c5b33b5880dfa9a86c23e9e7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
+]
+
+[[package]]
+name = "genco-macros"
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c42a1fe5a699c7f1d36ea6e04ed680a5c787cabff4b610ae3b8954ea3bcefec1"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -4080,9 +4040,6 @@ name = "hashbrown"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "43a3c133739dddd0d2990f9a4bdf8eb4b21ef50e4851ca85ab661199821d510e"
-dependencies = [
- "ahash",
-]
 
 [[package]]
 name = "hashbrown"
@@ -4113,6 +4070,15 @@ dependencies = [
  "foldhash 0.2.0",
  "serde",
  "serde_core",
+]
+
+[[package]]
+name = "hashlink"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7382cf6263419f2d8df38c55d7da83da5c18aef87fc7a7fc1fb1e344edfe14c1"
+dependencies = [
+ "hashbrown 0.15.5",
 ]
 
 [[package]]
@@ -4502,7 +4468,7 @@ checksum = "a0eb5a3343abf848c0984fe4604b2b105da9539376e24fc0a3b0007411ae4fd9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -4607,6 +4573,15 @@ dependencies = [
  "tokio-tungstenite",
  "universal-sierra-compiler",
  "url",
+]
+
+[[package]]
+name = "intrusive-collections"
+version = "0.9.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "189d0897e4cbe8c75efedf3502c18c887b05046e59d28404d4d8e46cbc4d1e86"
+dependencies = [
+ "memoffset",
 ]
 
 [[package]]
@@ -4855,6 +4830,7 @@ dependencies = [
  "num-bigint",
  "num-traits",
  "rand 0.8.5",
+ "rayon",
  "serde",
  "serde_json",
 ]
@@ -4997,7 +4973,7 @@ checksum = "1b27834086c65ec3f9387b096d66e99f221cf081c2b738042aa252bcd41204e3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5046,7 +5022,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "regex",
- "syn 2.0.114",
+ "syn 2.0.115",
  "tblgen",
  "unindent",
 ]
@@ -5056,6 +5032,15 @@ name = "memchr"
 version = "2.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
+
+[[package]]
+name = "memoffset"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
+dependencies = [
+ "autocfg",
+]
 
 [[package]]
 name = "metrics"
@@ -5152,7 +5137,7 @@ dependencies = [
  "cfg-if",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5332,7 +5317,7 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5399,7 +5384,7 @@ checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5432,9 +5417,9 @@ dependencies = [
 
 [[package]]
 name = "parity-scale-codec"
-version = "3.7.4"
+version = "3.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c9fde3d0718baf5bc92f577d652001da0f8d54cd03a7974e118d04fc888dc23d"
+checksum = "799781ae679d79a948e13d4824a40970bfa500058d245760dd857301059810fa"
 dependencies = [
  "arrayvec",
  "bitvec",
@@ -5448,14 +5433,14 @@ dependencies = [
 
 [[package]]
 name = "parity-scale-codec-derive"
-version = "3.7.4"
+version = "3.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "581c837bb6b9541ce7faa9377c20616e4fb7650f6b0f68bc93c827ee504fb7b3"
+checksum = "34b4653168b563151153c9e4c08ebed57fb8262bebfa79711552fa983c623e7a"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5599,7 +5584,7 @@ dependencies = [
  "phf_shared",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5634,7 +5619,7 @@ checksum = "6e918e4ff8c4549eb882f14b3a4bc8c8bc93de829416eacf579f1207a8fbf861"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5712,9 +5697,9 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "predicates"
-version = "3.1.3"
+version = "3.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5d19ee57562043d37e82899fade9a22ebab7be9cef5026b07fda9cdd4293573"
+checksum = "ada8f2932f28a27ee7b70dd6c1c39ea0675c55a36879ab92f3a715eaa1e63cfe"
 dependencies = [
  "anstyle",
  "predicates-core",
@@ -5722,15 +5707,15 @@ dependencies = [
 
 [[package]]
 name = "predicates-core"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "727e462b119fe9c93fd0eb1429a5f7647394014cf3c04ab2c0350eeb09095ffa"
+checksum = "cad38746f3166b4031b1a0d39ad9f954dd291e7854fcc0eed52ee41a0b50d144"
 
 [[package]]
 name = "predicates-tree"
-version = "1.0.12"
+version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72dd2d6d381dfb73a193c7fca536518d7caee39fc8503f74e7dc0be0531b425c"
+checksum = "d0de1b847b39c8131db0467e9df1ff60e6d0562ab8e9a16e568ad0fdb372e2f2"
 dependencies = [
  "predicates-core",
  "termtree",
@@ -5753,7 +5738,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "479ca8adacdd7ce8f1fb39ce9ecccbfe93a3f1344b3d0d97f20bc0196208f62b"
 dependencies = [
  "proc-macro2",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -5775,7 +5760,7 @@ version = "3.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "219cb19e96be00ab2e37d6e299658a0cfa83e52429179969b0f0121b4ac46983"
 dependencies = [
- "toml_edit 0.23.10+spec-1.0.0",
+ "toml_edit",
 ]
 
 [[package]]
@@ -5797,7 +5782,7 @@ dependencies = [
  "proc-macro-error-attr2",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -6102,7 +6087,7 @@ checksum = "b7186006dcb21920990093f30e3dea63b7d6e977bf1256be20c3563a5db070da"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -6241,27 +6226,30 @@ dependencies = [
 
 [[package]]
 name = "rstest"
-version = "0.17.0"
+version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de1bb486a691878cd320c2f0d319ba91eeaa2e894066d8b5f8f117c000e9d962"
+checksum = "f5a3193c063baaa2a95a33f03035c8a72b83d97a54916055ba22d35ed3839d49"
 dependencies = [
- "futures",
  "futures-timer",
+ "futures-util",
  "rstest_macros",
- "rustc_version 0.4.1",
 ]
 
 [[package]]
 name = "rstest_macros"
-version = "0.17.0"
+version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "290ca1a1c8ca7edb7c3283bd44dc35dd54fdec6253a3912e201ba1072018fca8"
+checksum = "9c845311f0ff7951c5506121a9ad75aec44d083c31583b2ea5a30bcb0b0abba0"
 dependencies = [
  "cfg-if",
+ "glob",
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
+ "regex",
+ "relative-path",
  "rustc_version 0.4.1",
- "syn 1.0.109",
+ "syn 2.0.115",
  "unicode-ident",
 ]
 
@@ -6298,35 +6286,6 @@ name = "ruint-macro"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "48fd7bd8a6377e15ad9d42a8ec25371b94ddc67abe7c8b9127bec79bebaaae18"
-
-[[package]]
-name = "rust-analyzer-salsa"
-version = "0.17.0-pre.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "719825638c59fd26a55412a24561c7c5bcf54364c88b9a7a04ba08a6eafaba8d"
-dependencies = [
- "indexmap 2.13.0",
- "lock_api",
- "oorandom",
- "parking_lot 0.12.5",
- "rust-analyzer-salsa-macros",
- "rustc-hash 1.1.0",
- "smallvec",
- "tracing",
- "triomphe",
-]
-
-[[package]]
-name = "rust-analyzer-salsa-macros"
-version = "0.17.0-pre.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d96498e9684848c6676c399032ebc37c52da95ecbefa83d71ccc53b9f8a4a8e"
-dependencies = [
- "heck 0.4.1",
- "proc-macro2",
- "quote",
- "syn 2.0.114",
-]
 
 [[package]]
 name = "rust_decimal"
@@ -6472,9 +6431,40 @@ dependencies = [
  "oorandom",
  "parking_lot 0.11.2",
  "rustc-hash 1.1.0",
- "salsa-macros",
+ "salsa-macros 0.16.0",
  "smallvec",
 ]
+
+[[package]]
+name = "salsa"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "27956164373aeec733ac24ff1736de8541234e3a8e7e6f916b28175b5752af3b"
+dependencies = [
+ "boxcar",
+ "crossbeam-queue",
+ "crossbeam-utils",
+ "hashbrown 0.15.5",
+ "hashlink",
+ "indexmap 2.13.0",
+ "intrusive-collections",
+ "inventory",
+ "parking_lot 0.12.5",
+ "portable-atomic",
+ "rayon",
+ "rustc-hash 2.1.1",
+ "salsa-macro-rules",
+ "salsa-macros 0.24.0",
+ "smallvec",
+ "thin-vec",
+ "tracing",
+]
+
+[[package]]
+name = "salsa-macro-rules"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ca3b9d6e47c08b5de4b218e0c5f7ec910b51bce6314e651c8e7b9d154d174da"
 
 [[package]]
 name = "salsa-macros"
@@ -6486,6 +6476,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "salsa-macros"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6337b62f2968be6b8afa30017d7564ecbde6832ada47ed2261fb14d0fd402ff4"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.115",
+ "synstructure",
 ]
 
 [[package]]
@@ -6526,19 +6528,6 @@ dependencies = [
 
 [[package]]
 name = "schemars"
-version = "0.8.22"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3fbf2ae1b8bc8e02df939598064d22402220cd5bbcca1c76f7d6a310974d5615"
-dependencies = [
- "dyn-clone",
- "indexmap 1.9.3",
- "schemars_derive",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "schemars"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4cd191f9397d57d581cddd31014772520aa448f65ef991055d7f61582c65165f"
@@ -6557,20 +6546,21 @@ checksum = "a2b42f36aa1cd011945615b92222f6bf73c599a102a300334cd7f8dbeec726cc"
 dependencies = [
  "dyn-clone",
  "ref-cast",
+ "schemars_derive",
  "serde",
  "serde_json",
 ]
 
 [[package]]
 name = "schemars_derive"
-version = "0.8.22"
+version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32e265784ad618884abaea0600a9adf15393368d840e0222d101a072f3f7534d"
+checksum = "7d115b50f4aaeea07e79c1912f645c7513d81715d0420f8bc77a18c6260b307f"
 dependencies = [
  "proc-macro2",
  "quote",
  "serde_derive_internals",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -6711,7 +6701,7 @@ checksum = "d540f220d3187173da220f885ab66608367b6574e925011a9353e4badda91d79"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -6722,7 +6712,7 @@ checksum = "18d26a20a969b9e3fdf2fc2d9f21eda6c40e2de84c9408bb5d3b05d499aae711"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -6763,11 +6753,11 @@ dependencies = [
 
 [[package]]
 name = "serde_spanned"
-version = "0.6.9"
+version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf41e0cfaf7226dca15e8197172c295a782857fcb97fad1808a166870dee75a3"
+checksum = "f8bbf91e5a4d6315eee45e704372590b30e260ee83af6639d64557f51b067776"
 dependencies = [
- "serde",
+ "serde_core",
 ]
 
 [[package]]
@@ -6810,7 +6800,7 @@ dependencies = [
  "darling 0.21.3",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -6859,7 +6849,7 @@ checksum = "6f50427f258fb77356e4cd4aa0e87e2bd2c66dbcee41dc405282cae2bfc26c83"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7074,7 +7064,7 @@ checksum = "b08520b7d80eda7bf1a223e8db4f9bb5779a12846f15ebf8f8d76667eca7f5ad"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7202,19 +7192,19 @@ dependencies = [
  "base64 0.22.1",
  "bigdecimal",
  "blockifier",
- "cairo-lang-casm 2.12.3",
- "cairo-lang-compiler 2.12.3",
- "cairo-lang-defs 2.12.3",
- "cairo-lang-diagnostics 2.12.3",
- "cairo-lang-filesystem 2.12.3",
- "cairo-lang-lowering 2.12.3",
- "cairo-lang-semantic 2.12.3",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-generator 2.12.3",
- "cairo-lang-sierra-to-casm 2.12.3",
+ "cairo-lang-casm 2.15.0",
+ "cairo-lang-compiler 2.15.0",
+ "cairo-lang-defs 2.15.0",
+ "cairo-lang-diagnostics 2.15.0",
+ "cairo-lang-filesystem 2.15.0",
+ "cairo-lang-lowering 2.15.0",
+ "cairo-lang-semantic 2.15.0",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-generator 2.15.0",
+ "cairo-lang-sierra-to-casm 2.15.0",
  "cairo-lang-starknet-classes",
- "cairo-lang-syntax 2.12.3",
- "cairo-lang-utils 2.12.3",
+ "cairo-lang-syntax 2.15.0",
+ "cairo-lang-utils 2.15.0",
  "cairo-vm",
  "flate2",
  "lru 0.16.3",
@@ -7294,7 +7284,7 @@ checksum = "77fe79a81e657d7f500b9a3706a42cdb3691fd36049845e1ea4b7ea8181860cd"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7386,9 +7376,8 @@ dependencies = [
 
 [[package]]
 name = "starknet_api"
-version = "0.16.0-rc.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d1b32bfe0c7d92604633fe2a6beafc732e6517e07203f0c5c3be1ec06d90d99"
+version = "0.18.0-dev.0"
+source = "git+https://github.com/starkware-libs/sequencer?tag=APOLLO-PRE-PROOF-DEMO-11#3e8e9a1d6ed45f9e7df714141a09bed33c4ba2e5"
 dependencies = [
  "apollo_infra_utils",
  "apollo_sizeof",
@@ -7397,8 +7386,8 @@ dependencies = [
  "cached",
  "cairo-lang-runner",
  "cairo-lang-starknet-classes",
- "cairo-lang-utils 2.12.3",
- "derive_more 0.99.20",
+ "cairo-lang-utils 2.15.0",
+ "derive_more",
  "expect-test",
  "flate2",
  "hex",
@@ -7421,6 +7410,7 @@ dependencies = [
  "strum_macros 0.25.3",
  "thiserror 1.0.69",
  "time",
+ "tokio",
 ]
 
 [[package]]
@@ -7481,7 +7471,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustversion",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7493,7 +7483,7 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7515,9 +7505,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.114"
+version = "2.0.115"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4d107df263a3013ef9b1879b0df87d706ff80f65a86ea879bd9c31f9b307c2a"
+checksum = "6e614ed320ac28113fa64972c4262d5dbc89deacdfd00c34a3e4cea073243c12"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -7526,14 +7516,14 @@ dependencies = [
 
 [[package]]
 name = "syn-solidity"
-version = "1.5.4"
+version = "1.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2379beea9476b89d0237078be761cf8e012d92d5ae4ae0c9a329f974838870fc"
+checksum = "f8658017776544996edc21c8c7cc8bb4f13db60955382f4bac25dc6303b38438"
 dependencies = [
  "paste",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7553,7 +7543,7 @@ checksum = "728a70f3dbaf5bab7f0c4b1ac8d7ae5ea60a4b5549c8a5914361c99147a709d2"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7644,6 +7634,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f50febec83f5ee1df3015341d8bd429f2d1cc62bcba7ea2076759d315084683"
 
 [[package]]
+name = "thin-vec"
+version = "0.2.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "144f754d318415ac792f9d69fc87abbbfc043ce2ef041c60f16ad828f638717d"
+
+[[package]]
 name = "thiserror"
 version = "1.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7669,7 +7665,7 @@ checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7680,7 +7676,7 @@ checksum = "ebc4ee7f67670e9b64d05fa4253e753e016c6c95ff35b89b7941d6b856dec1d5"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7793,7 +7789,7 @@ checksum = "af407857209536a95c8e56f8231ef2c2e2aff839b22e07a1ffcbc617e9db9fa5"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -7864,23 +7860,17 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.8.23"
+version = "0.9.12+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc1beb996b9d83529a9e75c17a1686767d148d70663143c7854d8b4a09ced362"
+checksum = "cf92845e79fc2e2def6a5d828f0801e29a2f8acc037becc5ab08595c7d5e9863"
 dependencies = [
- "serde",
+ "indexmap 2.13.0",
+ "serde_core",
  "serde_spanned",
- "toml_datetime 0.6.11",
- "toml_edit 0.22.27",
-]
-
-[[package]]
-name = "toml_datetime"
-version = "0.6.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22cddaf88f4fbc13c51aebbf5f8eceb5c7c5a9da2ac40a13519eb5b0a0e8f11c"
-dependencies = [
- "serde",
+ "toml_datetime",
+ "toml_parser",
+ "toml_writer",
+ "winnow",
 ]
 
 [[package]]
@@ -7894,44 +7884,30 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.22.27"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41fe8c660ae4257887cf66394862d21dbca4a6ddd26f04a3560410406a2f819a"
-dependencies = [
- "indexmap 2.13.0",
- "serde",
- "serde_spanned",
- "toml_datetime 0.6.11",
- "toml_write",
- "winnow",
-]
-
-[[package]]
-name = "toml_edit"
 version = "0.23.10+spec-1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "84c8b9f757e028cee9fa244aea147aab2a9ec09d5325a9b01e0a49730c2b5269"
 dependencies = [
  "indexmap 2.13.0",
- "toml_datetime 0.7.5+spec-1.1.0",
+ "toml_datetime",
  "toml_parser",
  "winnow",
 ]
 
 [[package]]
 name = "toml_parser"
-version = "1.0.6+spec-1.1.0"
+version = "1.0.7+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3198b4b0a8e11f09dd03e133c0280504d0801269e9afa46362ffde1cbeebf44"
+checksum = "247eaa3197818b831697600aadf81514e577e0cba5eab10f7e064e78ae154df1"
 dependencies = [
  "winnow",
 ]
 
 [[package]]
-name = "toml_write"
-version = "0.1.2"
+name = "toml_writer"
+version = "1.0.6+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d99f8c9a7727884afe522e9bd5edbfc91a3312b36a77b5fb8926e4c31a41801"
+checksum = "ab16f14aed21ee8bfd8ec22513f7287cd4a91aa92e44edfe2c17ddd004e92607"
 
 [[package]]
 name = "tower"
@@ -8012,7 +7988,7 @@ checksum = "7490cfa5ec963746568740651ac6781f701c9c5ea257c58e057f3ba8cf69e8da"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8049,6 +8025,7 @@ dependencies = [
  "sharded-slab",
  "smallvec",
  "thread_local",
+ "time",
  "tracing",
  "tracing-core",
  "tracing-log",
@@ -8072,17 +8049,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ad06847b7afb65c7866a36664b75c40b895e318cea4f71299f013fb22965329d"
 dependencies = [
  "quote",
- "syn 2.0.114",
-]
-
-[[package]]
-name = "triomphe"
-version = "0.1.15"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd69c5aa8f924c7519d6372789a74eac5b94fb0f8fcf0d4a97eb0bfc3e785f39"
-dependencies = [
- "serde",
- "stable_deref_trait",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8147,7 +8114,7 @@ checksum = "27a7a9b72ba121f6f1f6c3632b85604cac41aedb5ddc70accbebb6cac83de846"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8236,18 +8203,21 @@ checksum = "7264e107f553ccae879d21fbea1d6724ac785e8c3bfc762137959b5802826ef3"
 
 [[package]]
 name = "universal-sierra-compiler"
-version = "2.6.0"
+version = "2.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f7fb03117fdc04f671f6b3b0e1ba0c0abbb3b7002d43ad565c91f8f450a21bd"
+checksum = "146c495ea6e70c4c4bde4b0c19842b1fda84d86952d32d5a5207c4276f55c231"
 dependencies = [
  "anyhow",
- "cairo-lang-sierra 2.12.3",
- "cairo-lang-sierra-to-casm 2.12.3",
+ "cairo-lang-sierra 2.15.0",
+ "cairo-lang-sierra-to-casm 2.15.0",
+ "cairo-lang-sierra-type-size",
  "cairo-lang-starknet 1.0.0-rc0",
  "cairo-lang-starknet-classes",
  "clap",
  "console",
+ "serde_core",
  "serde_json",
+ "tracing",
  "universal-sierra-compiler-cairo-lang-starknet-proxy",
 ]
 
@@ -8366,7 +8336,7 @@ dependencies = [
  "proc-macro-error2",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8380,6 +8350,15 @@ name = "vcpkg"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
+
+[[package]]
+name = "vector-map"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "03b34e878e32c750bb4253be124adb9da1dc93ca5d98c210787badf1e1ccdca7"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "version_check"
@@ -8491,7 +8470,7 @@ dependencies = [
  "bumpalo",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
  "wasm-bindgen-shared",
 ]
 
@@ -8656,7 +8635,7 @@ checksum = "2bbd5b46c938e506ecbce286b6628a02171d56153ba733b6c741fc627ec9579b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8667,7 +8646,7 @@ checksum = "053e2e040ab57b9dc951b72c264860db7eb3b0200ba345b4e4c3b14f67855ddf"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8678,7 +8657,7 @@ checksum = "053c4c462dc91d3b1504c6fe5a726dd15e216ba718e84a0e46a88fbe5ded3515"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8689,7 +8668,7 @@ checksum = "3f316c4a2570ba26bbec722032c4099d8c8bc095efccdc15688708623367e358"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -8950,7 +8929,7 @@ dependencies = [
  "heck 0.5.0",
  "indexmap 2.13.0",
  "prettyplease",
- "syn 2.0.114",
+ "syn 2.0.115",
  "wasm-metadata",
  "wit-bindgen-core",
  "wit-component",
@@ -8966,7 +8945,7 @@ dependencies = [
  "prettyplease",
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
  "wit-bindgen-core",
  "wit-bindgen-rust",
 ]
@@ -9069,7 +9048,7 @@ checksum = "b659052874eb698efe5b9e8cf382204678a0086ebf46982b79d6ca3182927e5d"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
  "synstructure",
 ]
 
@@ -9090,7 +9069,7 @@ checksum = "4122cd3169e94605190e77839c9a40d40ed048d305bfdc146e7df40ab0f3e517"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -9110,7 +9089,7 @@ checksum = "d71e5d6e06ab090c67b5e44993ec16b72dcbaabc526db883a360057678b48502"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
  "synstructure",
 ]
 
@@ -9131,7 +9110,7 @@ checksum = "85a5b4158499876c763cb03bc4e49185d3cccbabb15b33c627f7884f43db852e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -9164,7 +9143,7 @@ checksum = "eadce39539ca5cb3985590102671f2567e659fca9666581ad3411d59207951f3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.114",
+ "syn 2.0.115",
 ]
 
 [[package]]
@@ -9181,9 +9160,9 @@ dependencies = [
 
 [[package]]
 name = "zmij"
-version = "1.0.20"
+version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4de98dfa5d5b7fef4ee834d0073d560c9ca7b6c46a71d058c48db7960f8cfaf7"
+checksum = "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa"
 
 [[package]]
 name = "zstd"

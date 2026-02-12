@@ -156,8 +156,8 @@ mod tests {
     use crate::traits::HashIdentified;
     use crate::utils::test_utils::{dummy_contract_address, dummy_declare_tx_v3_with_hash};
 
-    #[test]
-    fn filter_keys_with_empty_or_no_filter() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_keys_with_empty_or_no_filter() {
         let keys = vec![1u32];
         // no filter
         assert!(check_if_filter_applies_for_event_keys(&None, &keys));
@@ -171,8 +171,8 @@ mod tests {
         assert!(check_if_filter_applies_for_event_keys(&Some(filter), &keys));
     }
 
-    #[test]
-    fn filter_applies_to_single_key() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_applies_to_single_key() {
         // check for 1 key
         let keys = vec![1u32];
 
@@ -191,8 +191,8 @@ mod tests {
         assert!(check_if_filter_applies_for_event_keys(&Some(filter), &keys));
     }
 
-    #[test]
-    fn filter_does_not_apply_to_single_key() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_does_not_apply_to_single_key() {
         let keys = vec![1u32];
 
         // filter with 1 key, that is different from the keys and second one empty filter
@@ -204,8 +204,8 @@ mod tests {
         assert!(!check_if_filter_applies_for_event_keys(&Some(filter), &keys));
     }
 
-    #[test]
-    fn filter_applies_to_multiple_keys() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_applies_to_multiple_keys() {
         let keys = vec![3u32, 2u32];
 
         // both filters apply to the keys, each filter is with 1 value
@@ -229,8 +229,8 @@ mod tests {
         assert!(check_if_filter_applies_for_event_keys(&Some(filter), &keys));
     }
 
-    #[test]
-    fn filter_does_not_apply_to_multiple_keys() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_does_not_apply_to_multiple_keys() {
         let keys = vec![3u32, 2u32];
 
         // first filter applies to the keys, second filter does not
@@ -246,8 +246,8 @@ mod tests {
         assert!(!check_if_filter_applies_for_event_keys(&Some(filter), &keys));
     }
 
-    #[test]
-    fn filter_with_address_only() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_with_address_only() {
         let event = dummy_event();
 
         // filter with address that is the same as the on in the event
@@ -259,8 +259,8 @@ mod tests {
         assert!(!check_if_filter_applies_for_event(&Some(address), &None, &event));
     }
 
-    #[test]
-    fn filter_with_keys_only() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_with_keys_only() {
         let event = dummy_event();
 
         let keys_filter = vec![vec![Felt::ONE, Felt::THREE]];
@@ -270,8 +270,8 @@ mod tests {
         assert!(check_if_filter_applies_for_event(&None, &Some(keys_filter), &event));
     }
 
-    #[test]
-    fn filter_with_address_and_keys() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn filter_with_address_and_keys() {
         let event = dummy_event();
 
         // filter with address correct and filter keys correct
@@ -295,8 +295,8 @@ mod tests {
         assert!(!check_if_filter_applies_for_event(&address, &Some(keys_filter), &event));
     }
 
-    #[test]
-    fn pagination_for_latest_block_that_has_1_transaction_with_5_events() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn pagination_for_latest_block_that_has_1_transaction_with_5_events() {
         let starknet = setup();
 
         // no pagination to the latest block events
@@ -349,8 +349,8 @@ mod tests {
         assert!(!has_more);
     }
 
-    #[test]
-    fn pagination_for_events_of_multiple_blocks() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn pagination_for_events_of_multiple_blocks() {
         let starknet = setup();
 
         // returns all events from all blocks
@@ -382,8 +382,8 @@ mod tests {
         assert!(has_more);
     }
 
-    #[test]
-    fn check_correct_events_being_returned() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn check_correct_events_being_returned() {
         let starknet = setup();
 
         // events with key 15 should be only 1 in the 5th transaction

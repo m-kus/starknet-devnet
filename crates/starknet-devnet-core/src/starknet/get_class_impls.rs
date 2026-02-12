@@ -87,8 +87,8 @@ mod tests {
         broadcasted_declare_tx_v3_of_dummy_class, resource_bounds_with_price_1,
     };
 
-    #[test]
-    fn get_sierra_class() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_sierra_class() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e18 as u128,
@@ -113,8 +113,8 @@ mod tests {
         assert_eq!(contract_class, expected)
     }
 
-    #[test]
-    fn get_class_hash_at_generated_accounts() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_class_hash_at_generated_accounts() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
@@ -129,8 +129,8 @@ mod tests {
         assert_eq!(class_hash, expected);
     }
 
-    #[test]
-    fn get_class_hash_at_generated_accounts_without_state_archive() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_class_hash_at_generated_accounts_without_state_archive() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
@@ -148,8 +148,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn get_class_at_generated_accounts() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_class_at_generated_accounts() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
@@ -163,8 +163,8 @@ mod tests {
         assert_eq!(contract_class, account.contract_class);
     }
 
-    #[test]
-    fn attempt_getting_class_from_block_before_declaration() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn attempt_getting_class_from_block_before_declaration() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
