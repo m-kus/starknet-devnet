@@ -306,7 +306,7 @@ async fn main() -> Result<(), anyhow::Error> {
     // shadow mutability of starknet_config
     let starknet_config = starknet_config;
 
-    let mut starknet = Starknet::new(&starknet_config)?;
+    let mut starknet = Starknet::new(&starknet_config).await?;
 
     let (address, listener) = bind_port(server_config.host, server_config.port).await?;
 
