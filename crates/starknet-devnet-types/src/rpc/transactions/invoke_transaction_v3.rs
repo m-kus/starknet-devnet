@@ -28,6 +28,8 @@ pub struct InvokeTransactionV3 {
     calldata: Calldata,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     proof_facts: Vec<Felt>,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    proof: String,
 }
 
 impl InvokeTransactionV3 {
@@ -45,6 +47,7 @@ impl InvokeTransactionV3 {
             calldata: broadcasted_txn.calldata.clone(),
             account_deployment_data: broadcasted_txn.account_deployment_data.clone(),
             proof_facts: broadcasted_txn.proof_facts.clone(),
+            proof: broadcasted_txn.proof.clone(),
         }
     }
 
@@ -70,6 +73,7 @@ impl From<InvokeTransactionV3> for BroadcastedInvokeTransactionV3 {
             calldata: value.calldata,
             account_deployment_data: value.account_deployment_data,
             proof_facts: value.proof_facts,
+            proof: value.proof,
         }
     }
 }

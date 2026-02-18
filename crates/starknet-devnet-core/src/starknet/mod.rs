@@ -951,6 +951,7 @@ impl Starknet {
             },
             account_deployment_data: vec![],
             proof_facts: vec![],
+            proof: String::new(),
         };
 
         // generate signature by signing the tx hash

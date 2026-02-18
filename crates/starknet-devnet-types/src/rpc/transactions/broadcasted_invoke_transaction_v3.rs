@@ -18,6 +18,8 @@ pub struct BroadcastedInvokeTransactionV3 {
     pub account_deployment_data: Vec<Felt>,
     #[serde(default)]
     pub proof_facts: Vec<Felt>,
+    #[serde(default)]
+    pub proof: String,
 }
 
 impl BroadcastedInvokeTransactionV3 {

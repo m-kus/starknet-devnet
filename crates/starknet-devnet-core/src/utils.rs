@@ -242,6 +242,7 @@ pub(crate) mod test_utils {
             calldata,
             account_deployment_data: vec![],
             proof_facts: vec![],
+            proof: String::new(),
         })
     }
 }
