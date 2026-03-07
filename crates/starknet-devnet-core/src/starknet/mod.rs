@@ -1186,6 +1186,58 @@ impl Starknet {
         Ok(state.get_storage_at(contract_address.into(), storage_key.into())?)
     }
 
+    pub fn find_last_storage_update_block(
+        &self,
+        block_id: &CustomBlockId,
+        contract_address: ContractAddress,
+        storage_key: PatriciaKey,
+    ) -> DevnetResult<u64> {
+        // For PreConfirmed: check pre_confirmed_state_diff first
+        if matches!(block_id, CustomBlockId::Tag(CustomBlockTag::PreConfirmed)) {
+            if let Some(updates) =
+                self.pre_confirmed_state_diff.storage_updates.get(&contract_address)
+            {
+                if updates.contains_key(&storage_key) {
+                    return Ok(self.blocks.pre_confirmed_block.block_number().0);
+                }
+            }
+        }
+
+        // Determine upper bound block number
+        let upper = match block_id {
+            CustomBlockId::Tag(
+                CustomBlockTag::Latest | CustomBlockTag::PreConfirmed,
+            ) => self
+                .blocks
+                .last_block_hash
+                .and_then(|h| self.blocks.hash_to_block.get(&h))
+                .map(|b| b.block_number()),
+            _ => self.get_block(block_id).ok().map(|b| b.block_number()),
+        };
+
+        let Some(upper) = upper else {
+            return Ok(0);
+        };
+
+        // Scan blocks in reverse order
+        for (block_num, block_hash) in self.blocks.num_to_hash.iter().rev() {
+            if *block_num > upper {
+                continue;
+            }
+            if let Some(diff) = self.blocks.hash_to_state_diff.get(block_hash) {
+                if diff
+                    .storage_updates
+                    .get(&contract_address)
+                    .is_some_and(|u| u.contains_key(&storage_key))
+                {
+                    return Ok(block_num.0);
+                }
+            }
+        }
+
+        Ok(0)
+    }
+
     pub fn get_block(&self, block_id: &CustomBlockId) -> DevnetResult<&StarknetBlock> {
         self.blocks.get_by_block_id(block_id).ok_or(Error::NoBlock)
     }

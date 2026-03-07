@@ -85,11 +85,11 @@ starknet-types-core = "0.2.4"
 starknet_api = { git = "https://github.com/starkware-libs/sequencer", tag = "APOLLO-PRE-PROOF-DEMO-11", features = ["testing"] }
 blockifier = { git = "https://github.com/starkware-libs/sequencer", tag = "APOLLO-PRE-PROOF-DEMO-11" }
 
-starknet-rs-signers = { version = "0.15.0", package = "starknet-rust-signers" }
-starknet-rs-core = { version = "0.17.0", package = "starknet-rust-core" }
-starknet-rs-providers = { version = "0.17.0", package = "starknet-rust-providers" }
-starknet-rs-accounts = { version = "0.17.0", package = "starknet-rust-accounts" }
-starknet-rs-contract = { version = "0.17.0", package = "starknet-rust-contract" }
+starknet-rs-signers = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-signers" }
+starknet-rs-core = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-core" }
+starknet-rs-providers = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-providers" }
+starknet-rs-accounts = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-accounts" }
+starknet-rs-contract = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-contract" }
 
 cairo-vm = "3.0.1"
 
