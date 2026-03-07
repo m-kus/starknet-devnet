@@ -1,25 +1,7 @@
 name: Build and Publish
 
 on:
-  workflow_run:
-    workflows: ["Build and Test"]
-    branches: [main]
-    types:
-      - completed
   workflow_dispatch:
-    inputs:
-      skip_crates_io:
-        description: 'Skip publishing to crates.io'
-        type: boolean
-        default: false
-      skip_docs:
-        description: 'Skip publishing documentation'
-        type: boolean
-        default: false
-      force_version_tags:
-        description: 'Force version tags regardless of version change'
-        type: boolean
-        default: false
 
 permissions:
   contents: write  # Needed for creating releases

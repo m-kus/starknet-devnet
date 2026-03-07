@@ -34,10 +34,11 @@ mod tests {
         broadcasted_declare_tx_v3, dummy_cairo_1_contract_class, resource_bounds_with_price_1,
     };
 
-    #[test]
+    #[tokio::test(flavor = "multi_thread")]
     /// This test checks that the state update is correct after a declare transaction v3.
-    fn correct_state_update_after_declare_transaction_v3() {
-        let (mut starknet, acc) = setup_starknet_with_no_signature_check_account(1e18 as u128);
+    async fn correct_state_update_after_declare_transaction_v3() {
+        let (mut starknet, acc) =
+            setup_starknet_with_no_signature_check_account(1e18 as u128).await;
         let contract_class = dummy_cairo_1_contract_class();
         let compiled_class_hash =
             compile_sierra_contract(&contract_class).unwrap().hash(&HashVersion::V2).0;
@@ -53,6 +54,7 @@ mod tests {
         // first execute declare v3 transaction
         let (txn_hash, _) = starknet
             .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_txn)))
+            .await
             .unwrap();
         let tx = starknet.transactions.get_by_hash_mut(&txn_hash).unwrap();
         assert_eq!(tx.finality_status, TransactionFinalityStatus::AcceptedOnL2);

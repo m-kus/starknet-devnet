@@ -10,7 +10,7 @@ use starknet_types::rpc::transactions::{
 use super::Starknet;
 use crate::error::{DevnetResult, Error, TransactionValidationError};
 
-pub fn add_invoke_transaction(
+pub async fn add_invoke_transaction(
     starknet: &mut Starknet,
     broadcasted_invoke_transaction: BroadcastedInvokeTransaction,
 ) -> DevnetResult<TransactionHash> {
@@ -63,7 +63,7 @@ pub fn add_invoke_transaction(
 
     let transaction = TransactionWithHash::new(transaction_hash, invoke_transaction);
 
-    starknet.handle_accepted_transaction(transaction, execution_info)?;
+    starknet.handle_accepted_transaction(transaction, execution_info).await?;
 
     Ok(transaction_hash)
 }
@@ -104,8 +104,8 @@ mod tests {
         resource_bounds_with_price_1, test_invoke_transaction_v3,
     };
 
-    #[test]
-    fn invoke_transaction_v3_with_only_query_version_should_return_an_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_with_only_query_version_should_return_an_error() {
         let mut invoke_transaction = test_invoke_transaction_v3(
             dummy_contract_address(),
             dummy_contract_address(),
@@ -118,7 +118,7 @@ mod tests {
         let BroadcastedInvokeTransaction::V3(ref mut tx_v3) = invoke_transaction;
         tx_v3.common.version = Felt::THREE + QUERY_VERSION_OFFSET;
 
-        let result = Starknet::default().add_invoke_transaction(invoke_transaction);
+        let result = Starknet::default().add_invoke_transaction(invoke_transaction).await;
         match result {
             Err(crate::error::Error::UnsupportedAction { msg }) => {
                 assert_eq!(msg, "only-query transactions are not supported")
@@ -133,8 +133,8 @@ mod tests {
         parts[0]
     }
 
-    #[test]
-    fn invoke_transaction_v3_successful_execution_with_only_l1_gas() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_successful_execution_with_only_l1_gas() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         let account_address = account.get_address();
         let initial_balance =
@@ -149,7 +149,7 @@ mod tests {
             resource_bounds_with_price_1(biguint_to_u64(&initial_balance), 0, 0),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
 
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
@@ -161,8 +161,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn invoke_transaction_v3_successful_execution_with_all_three_gas_bounds() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_successful_execution_with_all_three_gas_bounds() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         let account_address = account.get_address();
         let initial_balance =
@@ -180,7 +180,7 @@ mod tests {
             resource_bounds_with_price_1(gas_amount, gas_amount, gas_amount),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
 
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
@@ -192,8 +192,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn invoke_transaction_v3_with_invalid_gas_amounts() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_with_invalid_gas_amounts() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         let account_address = account.get_address();
 
@@ -218,7 +218,7 @@ mod tests {
                 resource_bounds_with_price_1(l1_gas, l1_data_gas, l2_gas),
             );
 
-            match starknet.add_invoke_transaction(invoke_transaction) {
+            match starknet.add_invoke_transaction(invoke_transaction).await {
                 Err(Error::TransactionValidationError(
                     TransactionValidationError::InsufficientResourcesForValidate,
                 )) => {}
@@ -229,8 +229,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn invoke_transaction_v1_successfully_changes_storage() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v1_successfully_changes_storage() {
         let (
             mut starknet,
             account,
@@ -254,7 +254,7 @@ mod tests {
         );
 
         // invoke transaction
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::AcceptedOnL2);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -275,7 +275,7 @@ mod tests {
         );
 
         // invoke transaction again
-        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(invoke_transaction).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -286,8 +286,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn invoke_transaction_v3_with_zero_gas_bounds_should_return_error() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_transaction_v3_with_zero_gas_bounds_should_return_error() {
         let nonce = 0;
         let tx = test_invoke_transaction_v3(
             dummy_contract_address(),
@@ -298,7 +298,7 @@ mod tests {
             resource_bounds_with_price_1(0, 0, 0),
         );
 
-        match Starknet::default().add_invoke_transaction(tx) {
+        match Starknet::default().add_invoke_transaction(tx).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InsufficientResourcesForValidate,
             )) => {}
@@ -306,23 +306,25 @@ mod tests {
         }
     }
 
-    #[test]
-    fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_demand_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_demand_mode() {
         invoke_tx_should_fail_if_nonce_repeated(
             BlockGenerationOn::Demand,
             TransactionFinalityStatus::PreConfirmed,
-        );
+        )
+        .await;
     }
 
-    #[test]
-    fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_tx_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_return_error_if_nonce_repeated_in_block_on_tx_mode() {
         invoke_tx_should_fail_if_nonce_repeated(
             BlockGenerationOn::Transaction,
             TransactionFinalityStatus::AcceptedOnL2,
-        );
+        )
+        .await;
     }
 
-    fn invoke_tx_should_fail_if_nonce_repeated(
+    async fn invoke_tx_should_fail_if_nonce_repeated(
         block_generation_mode: BlockGenerationOn,
         expected_finality_status: TransactionFinalityStatus,
     ) {
@@ -342,7 +344,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, l2_gas),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(tx.clone()).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(tx.clone()).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, expected_finality_status);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
@@ -358,7 +360,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, l2_gas * 2),
         );
 
-        match starknet.add_invoke_transaction(tx) {
+        match starknet.add_invoke_transaction(tx).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InvalidTransactionNonce {
                     address,
@@ -373,8 +375,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn nonce_should_be_incremented_if_invoke_reverted() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn nonce_should_be_incremented_if_invoke_reverted() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
 
         let account_address = account.get_address().into();
@@ -397,7 +399,7 @@ mod tests {
             resource_bounds_with_price_1(0, 128, 520_000),
         );
 
-        let transaction_hash = starknet.add_invoke_transaction(tx).unwrap();
+        let transaction_hash = starknet.add_invoke_transaction(tx).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::AcceptedOnL2);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Reverted);
@@ -407,8 +409,8 @@ mod tests {
         assert_eq!(nonce_after_reverted, Nonce(Felt::ONE));
     }
 
-    #[test]
-    fn invoke_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_fail_if_nonce_higher_than_expected_in_block_on_tx_mode() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         starknet.config.block_generation_on = BlockGenerationOn::Transaction;
 
@@ -422,7 +424,7 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e6 as u64),
         );
 
-        match starknet.add_invoke_transaction(tx) {
+        match starknet.add_invoke_transaction(tx).await {
             Err(Error::TransactionValidationError(
                 TransactionValidationError::InvalidTransactionNonce {
                     address,
@@ -437,8 +439,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn invoke_tx_should_pass_if_nonce_higher_than_expected_in_block_on_demand_mode() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invoke_tx_should_pass_if_nonce_higher_than_expected_in_block_on_demand_mode() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         starknet.config.block_generation_on = BlockGenerationOn::Demand;
 
@@ -452,15 +454,15 @@ mod tests {
             resource_bounds_with_price_1(0, 1000, 1e6 as u64),
         );
 
-        let tx_hash = starknet.add_invoke_transaction(tx).unwrap();
+        let tx_hash = starknet.add_invoke_transaction(tx).await.unwrap();
         let retrieved_tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
         assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::PreConfirmed);
         assert_eq!(retrieved_tx.execution_result.status(), TransactionExecutionStatus::Succeeded);
         assert_eq!(retrieved_tx.block_number, Some(BlockNumber(0)));
     }
 
-    #[test]
-    fn txs_with_successive_nonces_are_acceptable_in_the_same_block() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn txs_with_successive_nonces_are_acceptable_in_the_same_block() {
         let (mut starknet, account, contract_address, increase_balance_selector, _) = setup();
         starknet.config.block_generation_on = BlockGenerationOn::Demand;
 
@@ -474,7 +476,7 @@ mod tests {
                 resource_bounds_with_price_1(0, 1000, 1e6 as u64),
             );
 
-            let tx_hash = starknet.add_invoke_transaction(tx).unwrap();
+            let tx_hash = starknet.add_invoke_transaction(tx).await.unwrap();
             let retrieved_tx = starknet.transactions.get_by_hash_mut(&tx_hash).unwrap();
             assert_eq!(retrieved_tx.finality_status, TransactionFinalityStatus::PreConfirmed);
             assert_eq!(

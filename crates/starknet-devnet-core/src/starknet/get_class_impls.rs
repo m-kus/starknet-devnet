@@ -87,13 +87,14 @@ mod tests {
         broadcasted_declare_tx_v3_of_dummy_class, resource_bounds_with_price_1,
     };
 
-    #[test]
-    fn get_sierra_class() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_sierra_class() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e18 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let declare_txn = broadcasted_declare_tx_v3_of_dummy_class(
             account.account_address,
@@ -104,6 +105,7 @@ mod tests {
         let expected: ContractClass = declare_txn.contract_class.clone().into();
         let (_, class_hash) = starknet
             .add_declare_transaction(BroadcastedDeclareTransaction::V3(Box::new(declare_txn)))
+            .await
             .unwrap();
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
@@ -113,13 +115,14 @@ mod tests {
         assert_eq!(contract_class, expected)
     }
 
-    #[test]
-    fn get_class_hash_at_generated_accounts() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_class_hash_at_generated_accounts() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         let block_id = BlockId::Number(block_number.0);
@@ -129,17 +132,18 @@ mod tests {
         assert_eq!(class_hash, expected);
     }
 
-    #[test]
-    fn get_class_hash_at_generated_accounts_without_state_archive() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_class_hash_at_generated_accounts_without_state_archive() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::None,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         let block_id = BlockId::Number(block_number.0);
-        starknet.create_block(); // makes the queried block non-latest (and unsupported)
+        starknet.create_block().await; // makes the queried block non-latest (and unsupported)
 
         let class_hash = starknet.get_class_hash_at(&block_id, account.account_address);
         match class_hash.err().unwrap() {
@@ -148,13 +152,14 @@ mod tests {
         }
     }
 
-    #[test]
-    fn get_class_at_generated_accounts() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn get_class_at_generated_accounts() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         let block_id = BlockId::Number(block_number.0);
@@ -163,13 +168,14 @@ mod tests {
         assert_eq!(contract_class, account.contract_class);
     }
 
-    #[test]
-    fn attempt_getting_class_from_block_before_declaration() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn attempt_getting_class_from_block_before_declaration() {
         let (mut starknet, account) =
             setup_starknet_with_no_signature_check_account_and_state_capacity(
                 1e8 as u128,
                 StateArchiveCapacity::Full,
-            );
+            )
+            .await;
 
         let block_number = starknet.get_latest_block().unwrap().block_number();
         // class not present before the latest block

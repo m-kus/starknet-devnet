@@ -1,5 +1,7 @@
 use starknet_core::error::{ContractExecutionError, Error, StateError};
-use starknet_rs_core::types::{BlockId as ImportedBlockId, Felt, MsgFromL1};
+use starknet_rs_core::types::{
+    BlockId as ImportedBlockId, Felt, MsgFromL1, StorageResponseFlag, StorageResult,
+};
 use starknet_rs_providers::Provider;
 use starknet_types::contract_address::ContractAddress;
 use starknet_types::felt::{ClassHash, TransactionHash};
@@ -118,12 +120,15 @@ impl JsonRpcHandler {
         contract_address: ContractAddress,
         key: PatriciaKey,
         block_id: BlockId,
+        response_flags: Option<Vec<StorageResponseFlag>>,
     ) -> StrictRpcResult {
-        let felt = self
-            .api
-            .starknet
-            .lock()
-            .await
+        let include_last_update = response_flags
+            .as_ref()
+            .is_some_and(|f| f.contains(&StorageResponseFlag::IncludeLastUpdateBlock));
+
+        let mut starknet = self.api.starknet.lock().await;
+
+        let felt = starknet
             .contract_storage_at_block(&block_id, contract_address, key)
             .map_err(|err| match err {
                 Error::NoBlock => ApiError::BlockNotFound,
@@ -134,7 +139,18 @@ impl JsonRpcHandler {
                 unknown_error => ApiError::StarknetDevnetError(unknown_error),
             })?;
 
-        Ok(StarknetResponse::Felt(felt).into())
+        if include_last_update {
+            let last_update_block = starknet
+                .find_last_storage_update_block(&block_id, contract_address, key)
+                .map_err(ApiError::StarknetDevnetError)?;
+            Ok(StarknetResponse::StorageResult(StorageResult {
+                value: felt,
+                last_update_block,
+            })
+            .into())
+        } else {
+            Ok(StarknetResponse::Felt(felt).into())
+        }
     }
 
     /// starknet_getStorageProof

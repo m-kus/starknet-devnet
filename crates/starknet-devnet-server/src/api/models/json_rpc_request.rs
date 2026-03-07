@@ -539,6 +539,10 @@ mod requests_tests {
         let json_str = r#"{"method":"starknet_getStorageAt","params":{"contract_address":"0x134134","key":"0x134134","block_id":"latest"}}"#;
         assert_deserialization_succeeds(json_str);
 
+        // With response_flags
+        let json_str_with_flags = r#"{"method":"starknet_getStorageAt","params":{"contract_address":"0x134134","key":"0x134134","block_id":"latest","response_flags":["INCLUDE_LAST_UPDATE_BLOCK"]}}"#;
+        assert_deserialization_succeeds(json_str_with_flags);
+
         assert_deserialization_fails(
             &json_str.replace(r#""contract_address":"0x134134""#, r#""contract_address":"123""#),
             "Missing prefix 0x in 123",

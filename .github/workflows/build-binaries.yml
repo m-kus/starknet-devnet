@@ -1,0 +1,113 @@
+name: Build Binaries
+
+on:
+  pull_request:
+  push:
+    tags:
+      - "**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build - ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            artifact-name: starknet-devnet-x86_64-unknown-linux-gnu
+
+          - os: ubuntu-22.04
+            target: aarch64-unknown-linux-gnu
+            artifact-name: starknet-devnet-aarch64-unknown-linux-gnu
+
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-musl
+            artifact-name: starknet-devnet-x86_64-unknown-linux-musl
+
+          - os: macos-14
+            target: x86_64-apple-darwin
+            artifact-name: starknet-devnet-x86_64-apple-darwin
+
+          - os: macos-14
+            target: aarch64-apple-darwin
+            artifact-name: starknet-devnet-aarch64-apple-darwin
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Add target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: binary-${{ matrix.target }}
+          cache-on-failure: true
+
+      - name: Install cross-compilation dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          if [[ "${{ matrix.target }}" == *"-musl" ]]; then
+            sudo apt-get update && sudo apt-get install -y musl-tools
+          fi
+          if [[ "${{ matrix.target }}" == "aarch64-"* ]]; then
+            sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
+          fi
+
+      - name: Configure AArch64 Linux linker
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: |
+          echo '[target.aarch64-unknown-linux-gnu]' >> ~/.cargo/config.toml
+          echo 'linker = "aarch64-linux-gnu-gcc"' >> ~/.cargo/config.toml
+
+      - name: Build binary
+        run: cargo build --release --target=${{ matrix.target }} --bin starknet-devnet
+
+      - name: Archive binary
+        run: tar -czvf ${{ matrix.artifact-name }}.tar.gz --directory target/${{ matrix.target }}/release starknet-devnet
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact-name }}.tar.gz
+          retention-days: 30
+
+  release:
+    name: Create Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
+          files: |
+            artifacts/starknet-devnet-x86_64-unknown-linux-gnu/starknet-devnet-x86_64-unknown-linux-gnu.tar.gz
+            artifacts/starknet-devnet-aarch64-unknown-linux-gnu/starknet-devnet-aarch64-unknown-linux-gnu.tar.gz
+            artifacts/starknet-devnet-x86_64-unknown-linux-musl/starknet-devnet-x86_64-unknown-linux-musl.tar.gz
+            artifacts/starknet-devnet-x86_64-apple-darwin/starknet-devnet-x86_64-apple-darwin.tar.gz
+            artifacts/starknet-devnet-aarch64-apple-darwin/starknet-devnet-aarch64-apple-darwin.tar.gz

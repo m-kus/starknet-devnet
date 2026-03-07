@@ -8,7 +8,7 @@ use tracing::trace;
 use super::Starknet;
 use crate::error::DevnetResult;
 
-pub fn add_l1_handler_transaction(
+pub async fn add_l1_handler_transaction(
     starknet: &mut Starknet,
     transaction: L1HandlerTransaction,
 ) -> DevnetResult<TransactionHash> {
@@ -21,10 +21,12 @@ pub fn add_l1_handler_transaction(
         blockifier::transaction::transaction_execution::Transaction::L1Handler(executable_tx)
             .execute(&mut starknet.pre_confirmed_state.state, &starknet.block_context)?;
 
-    starknet.handle_accepted_transaction(
-        TransactionWithHash::new(transaction_hash, Transaction::L1Handler(transaction.clone())),
-        execution_info,
-    )?;
+    starknet
+        .handle_accepted_transaction(
+            TransactionWithHash::new(transaction_hash, Transaction::L1Handler(transaction.clone())),
+            execution_info,
+        )
+        .await?;
 
     // If L1 tx hash present, store the generated L2 tx hash in its messaging entry.
     // Not done as part of `handle_transaction_result` as it is specific to this tx type.
@@ -70,8 +72,8 @@ mod tests {
     use crate::utils::exported_test_utils::dummy_cairo_l1l2_contract;
     use crate::utils::test_utils::{cairo_0_account_without_validations, dummy_key_pair};
 
-    #[test]
-    fn l1_handler_transaction_hash_computation() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn l1_handler_transaction_hash_computation() {
         let from_address = "0x000000000000000000000000be3C44c09bc1a3566F3e1CA12e5AbA0fA4Ca72Be";
         let to_address = "0x039dc79e64f4bb3289240f88e0bae7d21735bef0d1a51b2bf3c4730cb16983e1";
         let selector = "0x02f15cff7b0eed8b9beb162696cf4e3e0e35fa7032af69cd1b7d2ac67a13f40f";
@@ -101,8 +103,8 @@ mod tests {
         assert_eq!(l1_handler_transaction_hash, transaction_hash);
     }
 
-    #[test]
-    fn l1_handler_transaction_successful_execution() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn l1_handler_transaction_successful_execution() {
         let (mut starknet, _account_address, contract_address, deposit_selector, _) = setup();
 
         let transaction = get_l1_handler_tx(
@@ -112,7 +114,7 @@ mod tests {
             vec![Felt::from(11), Felt::from(9999)],
         );
 
-        let transaction_hash = starknet.add_l1_handler_transaction(transaction).unwrap();
+        let transaction_hash = starknet.add_l1_handler_transaction(transaction).await.unwrap();
 
         let state_transaction = starknet.transactions.get_by_hash_mut(&transaction_hash).unwrap();
 
@@ -123,8 +125,8 @@ mod tests {
         );
     }
 
-    #[test]
-    fn l1_handler_transaction_not_l1_handler_entrypoint() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn l1_handler_transaction_not_l1_handler_entrypoint() {
         let (mut starknet, _account_address, contract_address, _, withdraw_selector) = setup();
 
         let tx = get_l1_handler_tx(
@@ -134,7 +136,7 @@ mod tests {
             vec![Felt::from(11), Felt::from(9999)],
         );
 
-        let tx_hash = starknet.add_l1_handler_transaction(tx).unwrap();
+        let tx_hash = starknet.add_l1_handler_transaction(tx).await.unwrap();
 
         let trace = match starknet.get_transaction_trace_by_hash(tx_hash) {
             Ok(TransactionTrace::L1Handler(trace)) => trace,

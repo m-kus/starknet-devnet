@@ -91,17 +91,13 @@ impl JsonRpcHandler {
                         }
                         ImportedL1DataAvailabilityMode::Blob => L1DataAvailabilityMode::Blob,
                     },
-                    n_transactions: origin_block.transaction_count,
-                    n_events: origin_block.event_count,
-                    state_diff_length: origin_block.state_diff_length,
-                    state_diff_commitment: StateDiffCommitment(PoseidonHash(
-                        origin_block.state_diff_commitment,
-                    )),
-                    transaction_commitment: TransactionCommitment(
-                        origin_block.transaction_commitment,
-                    ),
-                    event_commitment: EventCommitment(origin_block.event_commitment),
-                    receipt_commitment: ReceiptCommitment(origin_block.receipt_commitment),
+                    n_transactions: origin_block.transactions.len() as u64,
+                    n_events: 0,
+                    state_diff_length: 0,
+                    state_diff_commitment: StateDiffCommitment(PoseidonHash(Felt::ZERO)),
+                    transaction_commitment: TransactionCommitment(Felt::ZERO),
+                    event_commitment: EventCommitment(Felt::ZERO),
+                    receipt_commitment: ReceiptCommitment(Felt::ZERO),
                 };
                 Ok(origin_header)
             }

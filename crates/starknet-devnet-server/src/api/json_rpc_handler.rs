@@ -388,9 +388,12 @@ impl JsonRpcHandler {
                 self.get_block_with_receipts(block.block_id).await
             }
             StarknetSpecRequest::StateUpdate(block) => self.get_state_update(block.block_id).await,
-            StarknetSpecRequest::StorageAt(GetStorageInput { contract_address, key, block_id }) => {
-                self.get_storage_at(contract_address, key, block_id).await
-            }
+            StarknetSpecRequest::StorageAt(GetStorageInput {
+                contract_address,
+                key,
+                block_id,
+                response_flags,
+            }) => self.get_storage_at(contract_address, key, block_id, response_flags).await,
             StarknetSpecRequest::TransactionStatusByHash(TransactionHashInput {
                 transaction_hash,
             }) => self.get_transaction_status_by_hash(transaction_hash).await,

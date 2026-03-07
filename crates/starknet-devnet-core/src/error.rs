@@ -139,6 +139,11 @@ impl From<TransactionExecutionError> for Error {
                 TransactionPreValidationError::TransactionFeeError(tx_fee_err) => {
                     Self::from(*tx_fee_err)
                 }
+                TransactionPreValidationError::InvalidProofFacts(msg) => {
+                    Self::TransactionValidationError(
+                        TransactionValidationError::ValidationFailure { reason: msg },
+                    )
+                }
             },
             TransactionExecutionError::FeeCheckError(err) => err.into(),
             TransactionExecutionError::TransactionFeeError(err) => (*err).into(),

@@ -7,7 +7,7 @@ pub use json_rpc_request::{
 };
 pub use json_rpc_response::{DevnetResponse, JsonRpcResponse, StarknetResponse};
 use serde::{Deserialize, Serialize};
-use starknet_rs_core::types::{Felt, Hash256, TransactionExecutionStatus};
+use starknet_rs_core::types::{Felt, Hash256, StorageResponseFlag, TransactionExecutionStatus};
 use starknet_types::contract_address::ContractAddress;
 use starknet_types::felt::{BlockHash, ClassHash, TransactionHash};
 use starknet_types::num_bigint::BigUint;
@@ -51,6 +51,8 @@ pub struct GetStorageInput {
     pub contract_address: ContractAddress,
     pub key: PatriciaKey,
     pub block_id: BlockId,
+    #[serde(default)]
+    pub response_flags: Option<Vec<StorageResponseFlag>>,
 }
 
 #[derive(Deserialize, Clone, Debug)]
@@ -461,6 +463,8 @@ mod tests {
         BroadcastedDeclareTransaction, BroadcastedTransaction,
     };
 
+    use starknet_rs_core::types::StorageResponseFlag;
+
     use super::{BlockIdInput, EstimateFeeInput, GetStorageInput};
     use crate::test_utils::{EXPECTED_INVALID_BLOCK_ID_MSG, assert_contains};
 
@@ -728,6 +732,7 @@ mod tests {
             block_id: BlockId::Hash(Felt::ONE),
             contract_address: ContractAddress::new(Felt::TWO).unwrap(),
             key: PatriciaKey::new(Felt::THREE).unwrap(),
+            response_flags: None,
         };
 
         assert_get_storage_input_correctness(
@@ -749,6 +754,22 @@ mod tests {
             expected_storage_input,
             r#"{"block_id": {"block_hash": "0x01"}, "contract_address": "0x02", "keyy": "0x03"}"#,
         );
+    }
+
+    #[test]
+    fn deserialize_get_storage_input_with_response_flags() {
+        let json_str = r#"{"block_id": "latest", "contract_address": "0x01", "key": "0x02", "response_flags": ["INCLUDE_LAST_UPDATE_BLOCK"]}"#;
+        let input = serde_json::from_str::<GetStorageInput>(json_str).unwrap();
+        assert_eq!(
+            input.response_flags,
+            Some(vec![StorageResponseFlag::IncludeLastUpdateBlock])
+        );
+
+        // Without response_flags - should default to None
+        let json_str_no_flags =
+            r#"{"block_id": "latest", "contract_address": "0x01", "key": "0x02"}"#;
+        let input_no_flags = serde_json::from_str::<GetStorageInput>(json_str_no_flags).unwrap();
+        assert_eq!(input_no_flags.response_flags, None);
     }
 
     // unit tests for TransactionHashInput deserialization

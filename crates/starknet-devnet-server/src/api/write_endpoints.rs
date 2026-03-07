@@ -36,7 +36,7 @@ impl JsonRpcHandler {
         request: BroadcastedDeclareTransaction,
     ) -> StrictRpcResult {
         let (transaction_hash, class_hash) =
-            self.api.starknet.lock().await.add_declare_transaction(request).map_err(
+            self.api.starknet.lock().await.add_declare_transaction(request).await.map_err(
                 |err| match err {
                     starknet_core::error::Error::CompiledClassHashMismatch => {
                         ApiError::CompiledClassHashMismatch
@@ -63,7 +63,7 @@ impl JsonRpcHandler {
         request: BroadcastedDeployAccountTransaction,
     ) -> StrictRpcResult {
         let (transaction_hash, contract_address) =
-            self.api.starknet.lock().await.add_deploy_account_transaction(request).map_err(
+            self.api.starknet.lock().await.add_deploy_account_transaction(request).await.map_err(
                 |err| match err {
                     starknet_core::error::Error::StateError(
                         starknet_core::error::StateError::NoneClassHash(_),
@@ -83,7 +83,8 @@ impl JsonRpcHandler {
         &self,
         request: BroadcastedInvokeTransaction,
     ) -> StrictRpcResult {
-        let transaction_hash = self.api.starknet.lock().await.add_invoke_transaction(request)?;
+        let transaction_hash =
+            self.api.starknet.lock().await.add_invoke_transaction(request).await?;
 
         Ok(StarknetResponse::TransactionHash(TransactionHashOutput { transaction_hash }).into())
     }
@@ -222,7 +223,7 @@ impl JsonRpcHandler {
     pub async fn postman_send_message_to_l2(&self, message: MessageToL2) -> StrictRpcResult {
         let transaction = L1HandlerTransaction::try_from_message_to_l2(message)?;
         let transaction_hash =
-            self.api.starknet.lock().await.add_l1_handler_transaction(transaction)?;
+            self.api.starknet.lock().await.add_l1_handler_transaction(transaction).await?;
         Ok(DevnetResponse::TransactionHash(TransactionHashOutput { transaction_hash }).into())
     }
 
@@ -237,7 +238,7 @@ impl JsonRpcHandler {
     pub async fn create_block(&self) -> StrictRpcResult {
         let mut starknet = self.api.starknet.lock().await;
 
-        starknet.create_block();
+        starknet.create_block().await;
         let block = starknet.get_latest_block()?;
 
         Ok(DevnetResponse::CreatedBlock(CreatedBlock { block_hash: block.block_hash() }).into())
@@ -245,7 +246,7 @@ impl JsonRpcHandler {
 
     /// devnet_abortBlocks
     pub async fn abort_blocks(&self, data: AbortingBlocks) -> StrictRpcResult {
-        let aborted = self.api.starknet.lock().await.abort_blocks(data.starting_block_id)?;
+        let aborted = self.api.starknet.lock().await.abort_blocks(data.starting_block_id).await?;
         Ok(DevnetResponse::AbortedBlocks(AbortedBlocks { aborted }).into())
     }
 
@@ -257,8 +258,14 @@ impl JsonRpcHandler {
 
     /// devnet_setGasPrice
     pub async fn set_gas_price(&self, data: GasModificationRequest) -> StrictRpcResult {
-        let modified_gas =
-            self.api.starknet.lock().await.set_next_block_gas(data).map_err(ApiError::from)?;
+        let modified_gas = self
+            .api
+            .starknet
+            .lock()
+            .await
+            .set_next_block_gas(data)
+            .await
+            .map_err(ApiError::from)?;
 
         Ok(DevnetResponse::GasModification(modified_gas).into())
     }
@@ -268,7 +275,7 @@ impl JsonRpcHandler {
         self.api.dumpable_events.lock().await.clear();
 
         let restart_params = data.unwrap_or_default();
-        self.api.starknet.lock().await.restart(restart_params.restart_l1_to_l2_messaging)?;
+        self.api.starknet.lock().await.restart(restart_params.restart_l1_to_l2_messaging).await?;
 
         self.api.sockets.lock().await.clear();
 
@@ -279,7 +286,7 @@ impl JsonRpcHandler {
     pub async fn set_time(&self, data: SetTime) -> StrictRpcResult {
         let mut starknet = self.api.starknet.lock().await;
         let generate_block = data.generate_block.unwrap_or(true);
-        starknet.set_time(data.time, generate_block);
+        starknet.set_time(data.time, generate_block).await;
         let block_hash = if generate_block {
             let last_block = starknet.get_latest_block()?;
             Some(last_block.block_hash())
@@ -293,7 +300,7 @@ impl JsonRpcHandler {
     /// devnet_increaseTime
     pub async fn increase_time(&self, data: IncreaseTime) -> StrictRpcResult {
         let mut starknet = self.api.starknet.lock().await;
-        starknet.increase_time(data.time);
+        starknet.increase_time(data.time).await;
 
         let last_block = starknet.get_latest_block()?;
 
