@@ -496,7 +496,7 @@ impl JsonRpcHandler {
                 starknet_rs_core::types::EventFilter {
                     from_block: Some(ImportedBlockId::Number(from_origin)),
                     to_block: Some(ImportedBlockId::Number(to_origin)),
-                    address: address.map(|address| address.into()),
+                    address: address.map(|address| starknet_rs_core::types::AddressFilter::Single(address.into())),
                     keys,
                 },
                 origin_continuation_token,

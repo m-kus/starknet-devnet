@@ -461,7 +461,7 @@ impl Starknet {
             self.pre_confirmed_state_diff.clone().into();
 
         if !self.config.lite_mode {
-            let commitments = calculate_block_commitments(
+            let (commitments, _measurements) = calculate_block_commitments(
                 &transaction_data,
                 thin_state_diff.clone(),
                 l1_da_mode,
