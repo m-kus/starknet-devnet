@@ -143,6 +143,14 @@ impl RpcHandler for JsonRpcHandler {
                 Ok(Message::Binary(bytes)) => {
                     self.on_websocket_call(&bytes, socket_writer.clone(), socket_id).await;
                 }
+                Ok(Message::Ping(payload)) => {
+                    let mut writer = socket_writer.lock().await;
+                    if let Err(e) = writer.send(Message::Pong(payload)).await {
+                        tracing::error!("Failed to send pong: {e:?}");
+                        break;
+                    }
+                }
+                Ok(Message::Pong(_)) => {}
                 Ok(Message::Close(_)) => {
                     socket_safely_closed = true;
                     break;

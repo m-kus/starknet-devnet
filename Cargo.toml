@@ -58,7 +58,7 @@ tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"] }
 # misc
 base64 = { version = "0.22" }
 clap = { version = "4.5", features = ["derive", "env"] }
-flate2 = { version = ">= 1.0.26, < 1.0.27" }
+flate2 = "1.1.5"
 nonzero_ext = "0.3.0"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = { version = "1.0.145" }
@@ -82,31 +82,31 @@ ahash = "0.8"
 
 # Starknet dependencies
 starknet-types-core = "0.2.4"
-starknet_api = { git = "https://github.com/starkware-libs/sequencer", tag = "APOLLO-PRE-PROOF-DEMO-11", features = ["testing"] }
-blockifier = { git = "https://github.com/starkware-libs/sequencer", tag = "APOLLO-PRE-PROOF-DEMO-11" }
+starknet_api = { version = "0.18.0-rc.1", features = ["testing"] }
+blockifier = "0.18.0-rc.1"
 
-starknet-rs-signers = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-signers" }
-starknet-rs-core = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-core" }
-starknet-rs-providers = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-providers" }
-starknet-rs-accounts = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-accounts" }
-starknet-rs-contract = { git = "https://github.com/m-kus/starknet-rs", rev = "20b1ddebc133753f3666acde24a35b77e2a9522a", package = "starknet-contract" }
+starknet-rs-signers = { version = "0.19.0-rc.2", package = "starknet-rust-signers" }
+starknet-rs-core = { version = "0.19.0-rc.2", package = "starknet-rust-core" }
+starknet-rs-providers = { version = "0.19.0-rc.2", package = "starknet-rust-providers" }
+starknet-rs-accounts = { version = "0.19.0-rc.2", package = "starknet-rust-accounts" }
+starknet-rs-contract = { version = "0.19.0-rc.2", package = "starknet-rust-contract" }
 
-cairo-vm = "3.0.1"
+cairo-vm = "3.1.0"
 
 # Cairo-lang dependencies
-cairo-lang-starknet-classes = "2.14.1-dev.3"
-cairo-lang-compiler = "2.14.1-dev.3"
-cairo-lang-casm = "2.14.1-dev.3"
-cairo-lang-defs = "2.14.1-dev.3"
-cairo-lang-diagnostics = "2.14.1-dev.3"
-cairo-lang-filesystem = "2.14.1-dev.3"
-cairo-lang-lowering = "2.14.1-dev.3"
-cairo-lang-semantic = "2.14.1-dev.3"
-cairo-lang-sierra = "2.14.1-dev.3"
-cairo-lang-sierra-generator = "2.14.1-dev.3"
-cairo-lang-sierra-to-casm = "2.14.1-dev.3"
-cairo-lang-syntax = "2.14.1-dev.3"
-cairo-lang-utils = "2.14.1-dev.3"
+cairo-lang-starknet-classes = "2.17.0-rc.4"
+cairo-lang-compiler = "2.17.0-rc.4"
+cairo-lang-casm = "2.17.0-rc.4"
+cairo-lang-defs = "2.17.0-rc.4"
+cairo-lang-diagnostics = "2.17.0-rc.4"
+cairo-lang-filesystem = "2.17.0-rc.4"
+cairo-lang-lowering = "2.17.0-rc.4"
+cairo-lang-semantic = "2.17.0-rc.4"
+cairo-lang-sierra = "2.17.0-rc.4"
+cairo-lang-sierra-generator = "2.17.0-rc.4"
+cairo-lang-sierra-to-casm = "2.17.0-rc.4"
+cairo-lang-syntax = "2.17.0-rc.4"
+cairo-lang-utils = "2.17.0-rc.4"
 
 # Inner dependencies
 starknet-types = { version = "0.7.2", path = "crates/starknet-devnet-types", package = "starknet-devnet-types" }
@@ -144,3 +144,8 @@ parity-scale-codec-derive = "=3.7.5"
 
 # https://app.circleci.com/pipelines/github/0xSpaceShard/starknet-devnet/3033/workflows/3f93463c-7550-432b-8868-9bb0bf96dc10/jobs/5012
 cargo-platform = "=0.1.8"
+
+[patch.crates-io]
+# USC 2.7.0 calls from_contract_class with 3 args, but cairo-lang 2.16 changed it to 4 args.
+# This commit has the fix but hasn't been released as a non-prerelease yet.
+universal-sierra-compiler = { git = "https://github.com/software-mansion/universal-sierra-compiler", rev = "aec423b33420" }
