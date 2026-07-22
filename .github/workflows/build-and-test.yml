@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Load common configuration
         id: config
         uses: ./.github/actions/load-config
 
       - name: Set up Rust nightly
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1
         with:
           toolchain: ${{ steps.config.outputs.rust_nightly_version }}
           components: rustfmt
@@ -47,7 +47,7 @@ jobs:
       TABLEGEN_190_PREFIX: /usr/lib/llvm-19
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install LLVM 19 (required for cairo_native)
         run: |
@@ -62,7 +62,7 @@ jobs:
         uses: ./.github/actions/load-config
 
       - name: Set up Rust stable
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1
         with:
           toolchain: ${{ steps.config.outputs.rust_stable_version }}
           components: clippy
@@ -87,19 +87,19 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Load common configuration
         id: config
         uses: ./.github/actions/load-config
 
       - name: Set up Rust stable
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1
         with:
           toolchain: ${{ steps.config.outputs.rust_stable_version }}
 
       - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1.1.0
+        uses: foundry-rs/foundry-toolchain@eef83bf8f46f7ccaae8377bb99cfa3a5aa40c348 # v1.1.0
         with:
           version: nightly-5b7e4cb3c882b28f3c32ba580de27ce7381f415a
 
